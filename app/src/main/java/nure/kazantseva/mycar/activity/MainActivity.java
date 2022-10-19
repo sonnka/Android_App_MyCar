@@ -1,16 +1,16 @@
-package nure.kazantseva.mycar;
+package nure.kazantseva.mycar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import nure.kazantseva.mycar.db.DbHelperLogin;
+import nure.kazantseva.mycar.R;
+import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DbHelperUser;
 import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
 
@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText email, password;
     private InputValidator inputValidator;
-    private DbHelperLogin dbHelperLogin;
+    private DbHelperUser dbHelperUser;
+    private DBHelperAuto dbHelperAuto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
 
         inputValidator = new InputValidator(activity);
-        dbHelperLogin = new DbHelperLogin(activity);
+        dbHelperUser = new DbHelperUser(activity);
+        dbHelperAuto = new DBHelperAuto(activity);
     }
 
     public void onClickLogIn(View view) {
@@ -51,12 +53,24 @@ public class MainActivity extends AppCompatActivity {
         if(!inputValidator.isInputEditTextEmail(email)){
             return;
         }
-        if(dbHelperLogin.checkUser(email.getText().toString()) &&
-                dbHelperLogin.checkUser(email.getText().toString().trim()
+        if(dbHelperUser.checkUser(email.getText().toString().trim()) &&
+                dbHelperUser.checkUser(email.getText().toString().trim()
                 ,password.getText().toString().trim())){
             Toast.makeText(activity,"Everything is ok!",Toast.LENGTH_LONG).show();
+            checkAvailableData(email.getText().toString().trim());
         }else{
             Toast.makeText(activity,"Something went wrong!",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void checkAvailableData(String email) {
+        if(dbHelperAuto.checkByEmail(email) > 0){
+            Toast.makeText(activity,"Car is already exist",Toast.LENGTH_LONG).show();
+        }else{
+            Intent intent = new Intent(this.getApplicationContext(),CreateAuto.class);
+            intent.putExtra("email",email);
+            this.finish();
+            startActivity(intent);
         }
     }
 
@@ -66,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickSignUp(View view) {
-        Intent intent = new Intent(this,Register.class);
+        Intent intent = new Intent(this, Register.class);
         startActivity(intent);
     }
 }

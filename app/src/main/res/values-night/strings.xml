@@ -1,8 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyCar</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="login">Увійти</string>
-    <string name="createAcc">Створити аккаунт</string>
     <string name="PhraseOnCreate">Введіть дані про свое авто :</string>
 </resources>

@@ -1,4 +1,4 @@
-package nure.kazantseva.mycar;
+package nure.kazantseva.mycar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,14 +8,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import nure.kazantseva.mycar.db.DbHelperLogin;
+import nure.kazantseva.mycar.R;
+import nure.kazantseva.mycar.db.DbHelperUser;
 import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class Register extends AppCompatActivity {
 
     EditText name, email, password;
-    DbHelperLogin dbHelperLogin;
+    DbHelperUser dbHelperUser;
     InputValidator inputValidator;
 
     @Override
@@ -31,7 +32,7 @@ public class Register extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
-        dbHelperLogin = new DbHelperLogin(this.getApplicationContext());
+        dbHelperUser = new DbHelperUser(this.getApplicationContext());
         inputValidator = new InputValidator(this.getApplicationContext());
     }
     public void onClickCreateAccount(View view) {
@@ -51,15 +52,15 @@ public class Register extends AppCompatActivity {
         if(!inputValidator.isInputEditTextEmail(email)){
             return;
         }
-        if(!dbHelperLogin.checkUser(email.getText().toString().trim())){
+        if(!dbHelperUser.checkUser(email.getText().toString().trim())){
             User user = new User();
             user.setName(name.getText().toString());
             user.setEmail(email.getText().toString());
             user.setPassword(password.getText().toString());
 
-            dbHelperLogin.addUser(user);
+            dbHelperUser.addUser(user);
             Toast.makeText(this.getApplicationContext(),"New account created!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this,MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             this.finish();
             startActivity(intent);
         }else{
