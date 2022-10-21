@@ -5,14 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelperAuto;
-import nure.kazantseva.mycar.db.DbHelperUser;
 import nure.kazantseva.mycar.model.Auto;
-import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class CreateAuto extends AppCompatActivity {
@@ -22,6 +23,9 @@ public class CreateAuto extends AppCompatActivity {
     private InputValidator inputValidator;
     private DBHelperAuto dbHelperAuto;
     private String email;
+    private Spinner spinner;
+
+    private String[] type_of_fuel = new String[]{"Газ","Бензин","Дизель"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,34 @@ public class CreateAuto extends AppCompatActivity {
         brand = findViewById(R.id.brandInput);
         model = findViewById(R.id.modelInput);
         year = findViewById(R.id.yearInput);
-        fuel = findViewById(R.id.fuelInput);
         run = findViewById(R.id.runInput);
+        fuel = new EditText(activity);
 
         inputValidator = new InputValidator(activity);
         dbHelperAuto = new DBHelperAuto(activity);
+        spinner = findViewById(R.id.spinner);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter(this
+                , R.layout.layout_spinner_item, type_of_fuel);
+
+        adapter.setDropDownViewResource(R.layout.layout_spinner_item);
+
+        spinner.setAdapter(adapter);
+
+
+        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = (String)parent.getItemAtPosition(position);
+                fuel.setText(item);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+        spinner.setOnItemSelectedListener(itemSelectedListener);
     }
 
     public void onClickNext(View view) {
@@ -81,8 +108,9 @@ public class CreateAuto extends AppCompatActivity {
 
         dbHelperAuto.addAuto(auto);
         Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(this, MainActivity.class);
-//            this.finish();
-//            startActivity(intent);
+            Intent intent = new Intent(this, ListOfExpenses.class);
+            intent.putExtra("id",auto.getId());
+            this.finish();
+            startActivity(intent);
     }
 }

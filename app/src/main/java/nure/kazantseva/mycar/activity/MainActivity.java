@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DBHelperRefill;
 import nure.kazantseva.mycar.db.DbHelperUser;
 import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
@@ -56,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         if(dbHelperUser.checkUser(email.getText().toString().trim()) &&
                 dbHelperUser.checkUser(email.getText().toString().trim()
                 ,password.getText().toString().trim())){
-            Toast.makeText(activity,"Everything is ok!",Toast.LENGTH_LONG).show();
             checkAvailableData(email.getText().toString().trim());
         }else{
             Toast.makeText(activity,"Something went wrong!",Toast.LENGTH_LONG).show();
@@ -65,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAvailableData(String email) {
         if(dbHelperAuto.checkByEmail(email) > 0){
-            Toast.makeText(activity,"Car is already exist",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this.getApplicationContext(), ListOfExpenses.class);
+            intent.putExtra("email",email);
+            this.finish();
+            startActivity(intent);
+
         }else{
             Intent intent = new Intent(this.getApplicationContext(),CreateAuto.class);
             intent.putExtra("email",email);

@@ -10,7 +10,7 @@ import nure.kazantseva.mycar.model.Auto;
 
 public class DBHelperAuto extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_NAME = "MyCar.db";
     private static final String TABLE_AUTO = "auto";
@@ -91,5 +91,34 @@ public class DBHelperAuto extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return cursorCount;
+    }
+
+    public int findByEmail(String email){
+        String[] columns = {
+                COLUMN_AUTO_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = COLUMN_USER_EMAIL + " = ?";
+
+        String[] selectionArgs = {email};
+
+        Cursor cursor = db.query(TABLE_AUTO, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+
+        if(cursor.getCount() > 0 && cursor.moveToFirst()){
+            int id = cursor.getInt(0);
+            db.close();
+            return id;
+        }else {
+            db.close();
+            return 0;
+        }
+
     }
 }
