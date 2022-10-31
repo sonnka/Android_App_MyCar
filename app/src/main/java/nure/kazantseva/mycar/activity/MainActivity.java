@@ -8,13 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DBHelperOther;
 import nure.kazantseva.mycar.db.DBHelperRefill;
+import nure.kazantseva.mycar.db.DBHelperWasher;
 import nure.kazantseva.mycar.db.DbHelperUser;
+import nure.kazantseva.mycar.model.Other;
 import nure.kazantseva.mycar.model.User;
+import nure.kazantseva.mycar.model.Washer;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         inputValidator = new InputValidator(activity);
         dbHelperUser = new DbHelperUser(activity);
         dbHelperAuto = new DBHelperAuto(activity);
+
     }
 
     public void onClickLogIn(View view) {

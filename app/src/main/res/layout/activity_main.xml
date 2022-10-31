@@ -73,4 +73,19 @@
         android:layout_marginHorizontal="50dp"
         android:onClick="onClickSignUp"
         tools:ignore="UsingOnClickInXml" />
+    <TextView
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Забув пароль"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/grey"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:layout_below="@id/signup"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:onClick="onClickSignUp"
+        tools:ignore="UsingOnClickInXml" />
 </RelativeLayout>

@@ -10,7 +10,7 @@ import nure.kazantseva.mycar.model.Refill;
 
 public class DBHelperRefill extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_NAME = "MyCar.db";
     private static final String TABLE_REFILL = "refill";

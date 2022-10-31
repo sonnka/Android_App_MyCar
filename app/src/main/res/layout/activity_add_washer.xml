@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color1"
-    tools:context=".activity.AddRepair">
+    tools:context=".activity.AddWasher">
 
     <TextView
         android:id="@+id/back"
@@ -18,10 +18,10 @@
         android:onClick="back"/>
 
     <TextView
-        android:id="@+id/repair_text"
+        android:id="@+id/washer_text"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Ремонт авто"
+        android:text="Автомийка"
         android:fontFamily="@font/alata"
         android:textColor="@color/color4"
         android:layout_marginHorizontal="20dp"
@@ -34,7 +34,7 @@
         android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/repair_text"
+        android:layout_below="@id/washer_text"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="70dp"
         android:orientation="horizontal">
@@ -67,83 +67,12 @@
             android:textColorHint="@color/grey"
             android:textSize="18sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/line1"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/run_text"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text="Пробіг : "
-            android:fontFamily="@font/alata"
-            android:textColor="@color/color3"
-            android:textSize="23sp"
-            android:textStyle="normal"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="bottom"/>
-
-        <EditText
-            android:id="@+id/run"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:ems="10"
-            android:fontFamily="@font/alata"
-            android:inputType="number"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/color4"
-            android:textColorHighlight="@color/color2"
-            android:textColorHint="@color/grey"
-            android:textSize="18sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/line2"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/description_text"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text="Опис : "
-            android:fontFamily="@font/alata"
-            android:textColor="@color/color3"
-            android:textSize="23sp"
-            android:textStyle="normal"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="bottom"/>
-
-        <EditText
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:gravity="start|top"
-            android:maxLines="5"
-            android:inputType="textMultiLine"
-            android:fontFamily="@font/alata"
-            android:textColor="@color/color4"
-            android:textSize="18sp"
-            android:textStyle="normal"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/line3"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="40dp"
         android:orientation="horizontal">
@@ -179,7 +108,7 @@
         android:id="@+id/nextButton"
         android:layout_width="160dp"
         android:layout_height="70dp"
-        android:layout_below="@id/line4"
+        android:layout_below="@id/line2"
         android:layout_marginLeft="230dp"
         android:layout_marginTop="60dp"
         android:backgroundTint="@color/color2"

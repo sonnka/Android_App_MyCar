@@ -5,19 +5,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.adapters.ExpensesAdapter;
 import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DBHelperOther;
 import nure.kazantseva.mycar.db.DBHelperRefill;
+import nure.kazantseva.mycar.db.DBHelperRepair;
+import nure.kazantseva.mycar.db.DBHelperWasher;
+import nure.kazantseva.mycar.model.Other;
+import nure.kazantseva.mycar.model.Washer;
 
 public class ListOfExpenses extends AppCompatActivity {
 
@@ -27,8 +33,11 @@ public class ListOfExpenses extends AppCompatActivity {
     int auto_id;
     DBHelperAuto dbHelperAuto;
     DBHelperRefill dbHelperRefill;
+    DBHelperRepair dbHelperRepair;
+    DBHelperWasher dbHelperWasher;
+    DBHelperOther dbHelperOther;
     ExpensesAdapter expensesAdapter;
-    ArrayList<String> date, price;
+    ArrayList<String> date, price, text, layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +67,15 @@ public class ListOfExpenses extends AppCompatActivity {
 
     private void init(){
 
+        text = new ArrayList<>();
         date = new ArrayList<>();
         price = new ArrayList<>();
+        layout = new ArrayList<>();
 
         dbHelperRefill = new DBHelperRefill(this.getApplicationContext());
+        dbHelperRepair = new DBHelperRepair(this.getApplicationContext());
+        dbHelperWasher = new DBHelperWasher(this.getApplicationContext());
+        dbHelperOther = new DBHelperOther(this.getApplicationContext());
 
         recyclerView = findViewById(R.id.recycle_view);
         fab = (FloatingActionButton) findViewById(R.id.add_button);
@@ -83,7 +97,7 @@ public class ListOfExpenses extends AppCompatActivity {
             startActivity(intent);
         });
         fab2.setOnClickListener(view ->{
-            Intent intent = new Intent(ListOfExpenses.this,AddWatcher.class);
+            Intent intent = new Intent(ListOfExpenses.this, AddWasher.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
@@ -100,7 +114,7 @@ public class ListOfExpenses extends AppCompatActivity {
 
         displayData();
 
-        expensesAdapter = new ExpensesAdapter(this.getApplicationContext(),date,price);
+        expensesAdapter = new ExpensesAdapter(this.getApplicationContext(),layout,text,date,price);
         recyclerView.setAdapter(expensesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ListOfExpenses.this));
     }
@@ -122,15 +136,51 @@ public class ListOfExpenses extends AppCompatActivity {
     }
 
     private void displayData(){
-        Cursor cursor = dbHelperRefill.readAllDateByAutoId(auto_id);
-        if(cursor.getCount() == 0){
+        Cursor cursor1 = dbHelperRefill.readAllDateByAutoId(auto_id);
+        if(cursor1.getCount() == 0){
             Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
-            while(cursor.moveToNext()){
-                date.add(cursor.getString(2));
-                price.add(cursor.getString(6));
+            while(cursor1.moveToNext()){
+                layout.add("#EBFBEA");
+                text.add("Заправка");
+                date.add(cursor1.getString(2));
+                price.add(cursor1.getString(6));
             }
         }
+        cursor1 = dbHelperRepair.readAllDateByAutoId(auto_id);
+        if(cursor1.getCount() == 0){
+            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor1.moveToNext()){
+                layout.add("#F6ECF7");
+                text.add("Ремонт");
+                date.add(cursor1.getString(2));
+                price.add(cursor1.getString(5));
+            }
+        }
+        cursor1 = dbHelperWasher.readAllDateByAutoId(auto_id);
+        if(cursor1.getCount() == 0){
+            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor1.moveToNext()){
+                layout.add("#EFE7FA");
+                text.add("Автомийка");
+                date.add(cursor1.getString(2));
+                price.add(cursor1.getString(3));
+            }
+        }
+        cursor1 = dbHelperOther.readAllDateByAutoId(auto_id);
+        if(cursor1.getCount() == 0){
+            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor1.moveToNext()){
+                layout.add("#FDFDE8");
+                text.add("Інше");
+                date.add(cursor1.getString(2));
+                price.add(cursor1.getString(4));
+            }
+        }
+
     }
 
 }

@@ -2,6 +2,7 @@ package nure.kazantseva.mycar.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -9,7 +10,7 @@ import nure.kazantseva.mycar.model.Washer;
 
 public class DBHelperWasher extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_NAME = "MyCar.db";
     private static final String TABLE_WASHER = "washer";
@@ -60,6 +61,17 @@ public class DBHelperWasher extends SQLiteOpenHelper {
                 + COLUMN_WASHER_ID + "=" + id;
         db.execSQL(DELETE_WASHER);
         db.close();
+    }
+
+    public Cursor readAllDateByAutoId(int id){
+        String query = "SELECT * FROM " + TABLE_WASHER + " WHERE("
+                + COLUMN_AUTO_ID + "=" + id +")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
     }
 
 

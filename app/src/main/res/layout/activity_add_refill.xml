@@ -17,7 +17,7 @@
         android:onClick="back"/>
 
     <TextView
-        android:id="@+id/repair_text"
+        android:id="@+id/refill_text"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="Заправка авто"
@@ -33,7 +33,7 @@
         android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/repair_text"
+        android:layout_below="@id/refill_text"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
