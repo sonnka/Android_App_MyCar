@@ -71,13 +71,9 @@ public class Repair {
 
     @Override
     public String toString() {
-        return "Repair{" +
-                "id=" + id +
-                ", auto_id=" + auto_id +
-                ", date=" + date +
-                ", run=" + run +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                '}';
+        return  "Дата ремонту : " + date + '\n' +
+                "Пробіг на момент ремонту : " + run + " км" + '\n' +
+                "Опис ремонту : " + description + '\n' +
+                "Вартість : " + price + " грн";
     }
 }

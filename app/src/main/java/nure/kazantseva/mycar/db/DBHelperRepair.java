@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Optional;
+
 import nure.kazantseva.mycar.model.Repair;
 
 public class DBHelperRepair extends SQLiteOpenHelper {
@@ -77,5 +79,28 @@ public class DBHelperRepair extends SQLiteOpenHelper {
             cursor = db.rawQuery(query,null);
         }
         return cursor;
+    }
+
+    public Cursor findById(int id){
+        String query = "SELECT * FROM " + TABLE_REPAIR + " WHERE("
+                + COLUMN_REPAIR_ID + "=" + id +")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public void updateRepair(Repair repair){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String DELETE_REPAIR = "UPDATE " + TABLE_REPAIR + " SET "
+                + COLUMN_REPAIR_DATE + "=" + repair.getDate().toString() + ","
+                + COLUMN_REPAIR_RUN + "=" + repair.getRun() + ","
+                + COLUMN_REPAIR_DESCRIPTION + "=" + repair.getDescription() + ","
+                + COLUMN_REPAIR_PRICE + "=" + repair.getPrice()
+                + " WHERE " + COLUMN_REPAIR_ID + "=" + repair.getId();
+        db.execSQL(DELETE_REPAIR);
+        db.close();
     }
 }

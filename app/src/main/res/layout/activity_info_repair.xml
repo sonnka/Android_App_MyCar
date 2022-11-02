@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color1"
+    tools:context=".activity.InfoRepair">
+
+    <LinearLayout
+        android:id="@+id/function"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/edit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/color1"
+            android:layout_marginLeft="270dp"
+            android:src="@drawable/ic_edit" />
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/color1"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_delete" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_below="@+id/function"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/color4"
+        android:layout_marginTop="75dp"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Info"
+        android:lines="13"
+        android:layout_below="@+id/text"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/color3"
+        android:textStyle="normal"
+        android:lineHeight="60dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="50dp"
+        android:textSize="23sp"/>
+
+</RelativeLayout>
