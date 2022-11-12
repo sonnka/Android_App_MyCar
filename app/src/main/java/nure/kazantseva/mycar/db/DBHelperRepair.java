@@ -94,13 +94,13 @@ public class DBHelperRepair extends SQLiteOpenHelper {
 
     public void updateRepair(Repair repair){
         SQLiteDatabase db = this.getWritableDatabase();
-        String DELETE_REPAIR = "UPDATE " + TABLE_REPAIR + " SET "
+        String UPDATE_REPAIR = "UPDATE " + TABLE_REPAIR + " SET "
                 + COLUMN_REPAIR_DATE + "=" + repair.getDate().toString() + ","
                 + COLUMN_REPAIR_RUN + "=" + repair.getRun() + ","
                 + COLUMN_REPAIR_DESCRIPTION + "=" + repair.getDescription() + ","
                 + COLUMN_REPAIR_PRICE + "=" + repair.getPrice()
                 + " WHERE " + COLUMN_REPAIR_ID + "=" + repair.getId();
-        db.execSQL(DELETE_REPAIR);
+        db.execSQL(UPDATE_REPAIR);
         db.close();
     }
 }

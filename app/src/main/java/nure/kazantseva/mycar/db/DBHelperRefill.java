@@ -84,4 +84,29 @@ public class DBHelperRefill extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    public Cursor findById(int id){
+        String query = "SELECT * FROM " + TABLE_REFILL + " WHERE("
+                + COLUMN_REFILL_ID + "=" + id +")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public void updateRefill(Refill refill){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String UPDATE_REFILL = "UPDATE " + TABLE_REFILL + " SET "
+                + COLUMN_REFILL_DATE + "=" + refill.getDate().toString() + ","
+                + COLUMN_REFILL_RUN + "=" + refill.getRun() + ","
+                + COLUMN_REFILL_BEFORE_REFILL + "=" + refill.getBeforeRefill() + ","
+                + COLUMN_REFILL_ADD_FUEL + "=" + refill.getAddFuel() + ","
+                + COLUMN_REFILL_PRICE + "=" + refill.getPrice() + ","
+                + COLUMN_REFILL_STATION + "=" + refill.getStation() + ","
+                + " WHERE " + COLUMN_REFILL_ID + "=" + refill.getId();
+        db.execSQL(UPDATE_REFILL);
+        db.close();
+    }
 }

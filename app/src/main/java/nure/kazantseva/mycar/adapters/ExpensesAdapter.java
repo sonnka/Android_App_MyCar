@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.activity.InfoRepair;
+import nure.kazantseva.mycar.activity.Info;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyViewHolder> {
 
@@ -59,7 +59,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
                 TextView txt = v.findViewById(R.id.expense_id);
                 TextView txt2 = v.findViewById(R.id.text);
                 Integer expenseId = Integer.parseInt(txt.getText().toString());
-                Intent intent = new Intent(context,InfoRepair.class);
+                Intent intent = new Intent(context, Info.class);
                 intent.putExtra("AutoId",auto_id);
                 intent.putExtra("ExpenseId",expenseId);
                 intent.putExtra("TypeOfExpense",txt2.getText().toString());

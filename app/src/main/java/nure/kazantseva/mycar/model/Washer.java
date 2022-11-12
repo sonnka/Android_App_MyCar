@@ -51,11 +51,7 @@ public class Washer {
 
     @Override
     public String toString() {
-        return "Washer{" +
-                "id=" + id +
-                ", auto_id=" + auto_id +
-                ", date=" + date +
-                ", price=" + price +
-                '}';
+        return "Дата мийки : " + date + '\n' +
+                "Вартість : " + price + " грн";
     }
 }

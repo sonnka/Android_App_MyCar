@@ -74,5 +74,24 @@ public class DBHelperWasher extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor findById(int id){
+        String query = "SELECT * FROM " + TABLE_WASHER + " WHERE("
+                + COLUMN_WASHER_ID + "=" + id +")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
 
+    public void updateWasher(Washer washer){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String UPDATE_WASHER = "UPDATE " + TABLE_WASHER + " SET "
+                + COLUMN_WASHER_DATE + "=" + washer.getDate().toString() + ","
+                + COLUMN_WASHER_PRICE + "=" + washer.getPrice()
+                + " WHERE " + COLUMN_WASHER_ID + "=" + washer.getId();
+        db.execSQL(UPDATE_WASHER);
+        db.close();
+    }
 }

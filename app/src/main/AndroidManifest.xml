@@ -14,7 +14,7 @@
         android:launchMode="standard"
         tools:targetApi="31">
         <activity
-            android:name=".activity.InfoRepair"
+            android:name=".activity.Info"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

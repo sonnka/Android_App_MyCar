@@ -12,7 +12,8 @@ public class Refill {
     private double price;
     private String station;
 
-    public Refill(int auto_id, LocalDate date, long run, double beforeRefill, double addFuel, double price, String station) {
+    public Refill(int auto_id, LocalDate date, long run, double beforeRefill, double addFuel,
+                  double price, String station) {
         this.auto_id = auto_id;
         this.date = date;
         this.run = run;
@@ -77,7 +78,7 @@ public class Refill {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -91,15 +92,11 @@ public class Refill {
 
     @Override
     public String toString() {
-        return "Refill{" +
-                "id=" + id +
-                ", auto_id=" + auto_id +
-                ", date=" + date +
-                ", run=" + run + '\'' +
-                ", beforeRefill=" + beforeRefill +
-                ", addFuel=" + addFuel +
-                ", price=" + price +
-                ", station='" + station + '\'' +
-                '}';
+        return "Дата ремонту : " + date + '\n' +
+                "Пробіг на момент ремонту : " + run + " км" + '\n' +
+                "Кількість палива до заправки : " + beforeRefill  + " л" + '\n' +
+                "Залито палива : " + addFuel  + " л" + '\n' +
+                "Вартість : " + price + " грн" + '\n' +
+                "АЗС : " + station ;
     }
 }

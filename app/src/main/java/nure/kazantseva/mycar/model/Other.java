@@ -61,12 +61,8 @@ public class Other {
 
     @Override
     public String toString() {
-        return "Other{" +
-                "id=" + id +
-                ", auto_id=" + auto_id +
-                ", date=" + date +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                '}';
+        return "Дата : " + date + '\n' +
+                "Опис : " + description + '\n' +
+                "Вартість : " + price + " грн";
     }
 }
