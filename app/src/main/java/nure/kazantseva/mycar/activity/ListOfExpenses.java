@@ -50,6 +50,11 @@ public class ListOfExpenses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_expenses);
 
+       getExtra();
+        init();
+    }
+
+    private void getExtra(){
         dbHelperAuto = new DBHelperAuto(this.getApplicationContext());
 
         Bundle arguments = getIntent().getExtras();
@@ -67,10 +72,9 @@ public class ListOfExpenses extends AppCompatActivity {
             this.finish();
             startActivity(intent);
         }
-        init();
     }
 
-    private void init(){
+    public void init(){
 
         text = new ArrayList<>();
         date = new ArrayList<>();
@@ -85,11 +89,11 @@ public class ListOfExpenses extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
 
-        fab = (FloatingActionButton) findViewById(R.id.add_button);
-        fab1 = (FloatingActionButton) findViewById(R.id.other_button);
-        fab2 = (FloatingActionButton) findViewById(R.id.washer_button);
-        fab3 = (FloatingActionButton) findViewById(R.id.refill_button);
-        fab4 = (FloatingActionButton) findViewById(R.id.repair_button);
+        fab = findViewById(R.id.add_button);
+        fab1 = findViewById(R.id.other_button);
+        fab2 = findViewById(R.id.washer_button);
+        fab3 = findViewById(R.id.refill_button);
+        fab4 = findViewById(R.id.repair_button);
         fab.setOnClickListener(view -> {
             if(!isFABOpen){
                 showFABMenu();
@@ -157,6 +161,8 @@ public class ListOfExpenses extends AppCompatActivity {
                 price.add(cursor1.getString(6));
             }
         }
+
+
         cursor1 = dbHelperRepair.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
             Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
@@ -169,6 +175,8 @@ public class ListOfExpenses extends AppCompatActivity {
                 price.add(cursor1.getString(5));
             }
         }
+
+
         cursor1 = dbHelperWasher.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
             Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
@@ -181,6 +189,7 @@ public class ListOfExpenses extends AppCompatActivity {
                 price.add(cursor1.getString(3));
             }
         }
+
         cursor1 = dbHelperOther.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
             Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();

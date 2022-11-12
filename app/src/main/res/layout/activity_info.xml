@@ -19,7 +19,8 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/color1"
             android:layout_marginLeft="270dp"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            android:onClick="editExpense"/>
 
         <ImageButton
             android:id="@+id/delete"
@@ -27,7 +28,8 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/color1"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_delete" />
+            android:src="@drawable/ic_delete"
+            android:onClick="deleteExpense"/>
 
     </LinearLayout>
 

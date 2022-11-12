@@ -91,10 +91,10 @@ public class DBHelperOther extends SQLiteOpenHelper {
     public void updateOther(Other other){
         SQLiteDatabase db = this.getWritableDatabase();
         String UPDATE_OTHER = "UPDATE " + TABLE_OTHER + " SET "
-                + COLUMN_OTHER_DATE + "=" + other.getDate().toString() + ","
-                + COLUMN_OTHER_DESCRIPTION + "=" + other.getDescription() + ","
-                + COLUMN_OTHER_PRICE + "=" + other.getPrice()
-                + " WHERE " + COLUMN_OTHER_ID + "=" + other.getId();
+                + COLUMN_OTHER_DATE + " = '" + other.getDate().toString() + "',"
+                + COLUMN_OTHER_DESCRIPTION + " = '" + other.getDescription() + "',"
+                + COLUMN_OTHER_PRICE + " = '" + other.getPrice() +"'"
+                + " WHERE(" + COLUMN_OTHER_ID + "=" + other.getId() + ")";
         db.execSQL(UPDATE_OTHER);
         db.close();
     }

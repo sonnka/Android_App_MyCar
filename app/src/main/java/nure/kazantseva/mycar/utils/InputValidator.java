@@ -51,6 +51,7 @@ public class InputValidator {
         }
         return true;
     }
+
     public LocalDate convertToLocalDate(String date){
         String temp = date.replace("+ ","").replaceAll("/","-");
         String[] array = temp.split("-");
@@ -66,6 +67,19 @@ public class InputValidator {
             return resultDate;
         }
         return null;
+    }
+
+    public String convertStringToDateString(String date){
+        String temp = date.replace("+ ","").replaceAll("-","/");
+        String[] array = temp.split("/");
+        for(int i = 0 ; i < array.length; i++){
+            String[] str = array[i].split("");
+            if(str[0].equals("0")){
+                array[i] = str[1];
+            }
+        }
+        String result = array[2] + "/" + array[1] + "/" + array[0];
+        return result;
     }
 
 }

@@ -88,9 +88,9 @@ public class DBHelperWasher extends SQLiteOpenHelper {
     public void updateWasher(Washer washer){
         SQLiteDatabase db = this.getWritableDatabase();
         String UPDATE_WASHER = "UPDATE " + TABLE_WASHER + " SET "
-                + COLUMN_WASHER_DATE + "=" + washer.getDate().toString() + ","
-                + COLUMN_WASHER_PRICE + "=" + washer.getPrice()
-                + " WHERE " + COLUMN_WASHER_ID + "=" + washer.getId();
+                + COLUMN_WASHER_DATE + " = '" + washer.getDate().toString() + "',"
+                + COLUMN_WASHER_PRICE + " = '" + washer.getPrice() + "'"
+                + " WHERE(" + COLUMN_WASHER_ID + "=" + washer.getId() + ")";
         db.execSQL(UPDATE_WASHER);
         db.close();
     }

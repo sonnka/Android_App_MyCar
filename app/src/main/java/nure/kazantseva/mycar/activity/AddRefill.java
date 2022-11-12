@@ -2,14 +2,18 @@ package nure.kazantseva.mycar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
 import nure.kazantseva.mycar.R;
@@ -22,10 +26,13 @@ import nure.kazantseva.mycar.utils.InputValidator;
 public class AddRefill extends AppCompatActivity {
 
     EditText date,run,beforeRefill, addFuel, price,station;
+    Button nextButton;
     int auto_id;
+    int expense_id = 0;
     DatePickerDialog datePickerDialog;
     InputValidator inputValidator;
     DBHelperRefill dbHelperRefill;
+    Refill refill;
 
 
     @Override
@@ -33,36 +40,77 @@ public class AddRefill extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_refill);
 
+        getExtra();
+        init();
+
+        if(expense_id != 0){
+            edit();
+        }
+    }
+
+    private void getExtra(){
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
             auto_id = arguments.getInt("id");
+            if(arguments.containsKey("ExpenseId")){
+                expense_id = arguments.getInt("ExpenseId");
+            }
         }else{
             Toast.makeText(this.getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this.getApplicationContext(),ListOfExpenses.class);
             this.finish();
             startActivity(intent);
         }
-        init();
     }
 
     public void init(){
-        date = (EditText) findViewById(R.id.date);
+        nextButton.setText("Оновити запис");
+        date = findViewById(R.id.date);
         date.setInputType(0);
-        run = (EditText) findViewById(R.id.run);
-        beforeRefill = (EditText) findViewById(R.id.beforeRefill);
-        addFuel = (EditText) findViewById(R.id.addFuel);
-        price = (EditText) findViewById(R.id.price);
-        station = (EditText) findViewById(R.id.station);
+        run = findViewById(R.id.run);
+        beforeRefill = findViewById(R.id.beforeRefill);
+        addFuel = findViewById(R.id.addFuel);
+        price = findViewById(R.id.price);
+        station = findViewById(R.id.station);
+        nextButton = findViewById(R.id.nextButton);
+        nextButton.setText("Додати запис");
 
+        refill = new Refill();
         inputValidator = new InputValidator(this.getApplicationContext());
         dbHelperRefill = new DBHelperRefill(this.getApplicationContext());
     }
 
+    private void edit(){
+        Cursor cursor = dbHelperRefill.findById(expense_id);
+        if(cursor.getCount() == 0){
+            Toast.makeText(AddRefill.this,"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor.moveToNext()){
+                refill.setId(cursor.getInt(0));
+                refill.setAuto_id(cursor.getInt(1));
+                refill.setDate(LocalDate.parse(cursor.getString(2)));
+                refill.setRun(cursor.getInt(3));
+                refill.setBeforeRefill(cursor.getDouble(4));
+                refill.setAddFuel(cursor.getDouble(5));
+                refill.setPrice(cursor.getDouble(6));
+                refill.setStation(cursor.getString(7));
+            }
+        }
+
+        date.setText(inputValidator.convertStringToDateString(refill.getDate().toString().trim()));
+        run.setText(String.valueOf(refill.getRun()));
+        beforeRefill.setText(String.valueOf(refill.getBeforeRefill()));
+        addFuel.setText(String.valueOf(refill.getAddFuel()));
+        price.setText(String.valueOf(refill.getPrice()));
+        station.setText(refill.getStation());
+    }
+
+    @SuppressLint("SetTextI18n")
     public void onDate(View view) {
         final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR); // current year
-        int mMonth = c.get(Calendar.MONTH); // current month
-        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
         datePickerDialog = new DatePickerDialog(AddRefill.this,
                 (view1, year, monthOfYear, dayOfMonth) -> date.setText(dayOfMonth + "/"
                         + (monthOfYear + 1) + "/" + year), mYear, mMonth, mDay);
@@ -94,7 +142,6 @@ public class AddRefill extends AppCompatActivity {
         }
         if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
             if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
-                Refill refill = new Refill();
                 refill.setAuto_id(auto_id);
                 refill.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));
@@ -103,10 +150,14 @@ public class AddRefill extends AppCompatActivity {
                 refill.setBeforeRefill(Double.parseDouble
                         (beforeRefill.getText().toString().trim()));
                 refill.setAddFuel(Double.parseDouble(addFuel.getText().toString().trim()));
-                refill.setPrice(Integer.parseInt(price.getText().toString().trim()));
+                refill.setPrice(Double.parseDouble(price.getText().toString().trim()));
                 refill.setStation(station.getText().toString().trim());
 
-                dbHelperRefill.addRefill(refill);
+                if (expense_id != 0) {
+                    dbHelperRefill.updateRefill(refill);
+                } else {
+                    dbHelperRefill.addRefill(refill);
+                }
                 Toast.makeText(this.getApplicationContext(),"New refill created!",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, ListOfExpenses.class);
                 intent.putExtra("id",auto_id);

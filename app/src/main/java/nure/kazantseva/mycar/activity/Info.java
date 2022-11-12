@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class Info extends AppCompatActivity {
     DBHelperWasher dbHelperWasher;
     DBHelperOther dbHelperOther;
     InputValidator inputValidator;
+    ImageButton edit, delete;
 
     TextView text, info;
 
@@ -42,7 +45,6 @@ public class Info extends AppCompatActivity {
         setContentView(R.layout.activity_info);
 
         getExtra();
-
         init();
     }
 
@@ -76,9 +78,12 @@ public class Info extends AppCompatActivity {
 
         text = findViewById(R.id.text);
         info = findViewById(R.id.info);
+        edit = findViewById(R.id.edit);
+        delete = findViewById(R.id.delete);
 
         text.setText(typeOfExpense);
         getTypeOfExpense(typeOfExpense);
+
     }
 
     private void getTypeOfExpense(String name){
@@ -159,6 +164,80 @@ public class Info extends AppCompatActivity {
                 other.setPrice(cursor.getDouble(4));
 
                 info.setText(other.toString());
+            }
+        }
+    }
+
+    public void editExpense(View view) {
+        switch(typeOfExpense){
+            case "Ремонт": {
+                Intent intent = new Intent(this, AddRepair.class);
+                intent.putExtra("id",auto_id);
+                intent.putExtra("ExpenseId",expense_id);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                this.finish();
+                startActivity(intent);
+                break;
+            }
+            case "Заправка": {
+                Intent intent = new Intent(this, AddRefill.class);
+                intent.putExtra("id",auto_id);
+                intent.putExtra("ExpenseId",expense_id);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                this.finish();
+                startActivity(intent);
+                break;
+            }
+            case "Автомийка": {
+                Intent intent = new Intent(this, AddWasher.class);
+                intent.putExtra("id",auto_id);
+                intent.putExtra("ExpenseId",expense_id);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                this.finish();
+                startActivity(intent);
+                break;
+            }
+            default: {
+                Intent intent = new Intent(this, AddOther.class);
+                intent.putExtra("id",auto_id);
+                intent.putExtra("ExpenseId",expense_id);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                this.finish();
+                startActivity(intent);
+                break;
+            }
+        }
+    }
+
+    public void deleteExpense(View view) {
+        switch(typeOfExpense){
+            case "Ремонт":{
+                dbHelperRepair.deleteRepair(expense_id);
+                ListOfExpenses listOfExpenses = new ListOfExpenses();
+                listOfExpenses.init();
+                this.finish();
+                break;
+            }
+            case "Заправка": {
+                dbHelperRefill.deleteRefill(expense_id);
+                ListOfExpenses listOfExpenses = new ListOfExpenses();
+                listOfExpenses.init();
+                this.finish();
+                break;
+            }
+            case "Автомийка": {
+                dbHelperWasher.deleteWasher(expense_id);
+                ListOfExpenses listOfExpenses = new ListOfExpenses();
+                listOfExpenses.init();
+                this.finish();
+                break;
+            }
+            default:  {
+                dbHelperOther.deleteOther(expense_id);
+                ListOfExpenses listOfExpenses = new ListOfExpenses();
+                listOfExpenses.init();
+                this.finish();
+                break;
             }
         }
     }
