@@ -155,6 +155,9 @@ public class AddRepair extends AppCompatActivity {
     }
 
     public void back(View view) {
+        Intent intent = new Intent(this, MainPage.class);
+        intent.putExtra("id",auto_id);
+        startActivity(intent);
         this.finish();
     }
 }

@@ -64,7 +64,6 @@ public class AddRefill extends AppCompatActivity {
     }
 
     public void init(){
-        nextButton.setText("Оновити запис");
         date = findViewById(R.id.date);
         date.setInputType(0);
         run = findViewById(R.id.run);
@@ -81,6 +80,7 @@ public class AddRefill extends AppCompatActivity {
     }
 
     private void edit(){
+        nextButton.setText("Оновити запис");
         Cursor cursor = dbHelperRefill.findById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(AddRefill.this,"No data!",Toast.LENGTH_LONG).show();
@@ -173,6 +173,9 @@ public class AddRefill extends AppCompatActivity {
     }
 
     public void back(View view) {
+        Intent intent = new Intent(this, MainPage.class);
+        intent.putExtra("id",auto_id);
+        startActivity(intent);
         this.finish();
     }
 }

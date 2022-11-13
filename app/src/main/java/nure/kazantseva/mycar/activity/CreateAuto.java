@@ -37,7 +37,7 @@ public class CreateAuto extends AppCompatActivity {
             email = arguments.getString("email").toString();
         }else{
             Toast.makeText(activity,"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(),MainActivity.class);
+            Intent intent = new Intent(this.getApplicationContext(), LogIn.class);
             this.finish();
             startActivity(intent);
         }

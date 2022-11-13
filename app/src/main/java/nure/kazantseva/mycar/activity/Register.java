@@ -60,7 +60,7 @@ public class Register extends AppCompatActivity {
 
             dbHelperUser.addUser(user);
             Toast.makeText(this.getApplicationContext(),"New account created!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, LogIn.class);
             this.finish();
             startActivity(intent);
         }else{

@@ -1,73 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color1"
+    android:background="@color/color4"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
     tools:context=".activity.ListOfExpenses">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/repair_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        app:fabCustomSize="60dp"
-        app:srcCompat="@drawable/ic_repair"
-        tools:ignore="ContentDescription" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/refill_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        app:fabCustomSize="60dp"
-        app:srcCompat="@drawable/ic_refill"
-        tools:ignore="ContentDescription" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/washer_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        app:fabCustomSize="60dp"
-        app:srcCompat="@drawable/ic_washer"
-        tools:ignore="ContentDescription" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/other_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        app:fabCustomSize="60dp"
-        app:srcCompat="@drawable/ic_other"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:tint="#E8E7E7"
-        app:fabCustomSize="80dp"
-        app:srcCompat="@drawable/ic_add"
-        tools:ignore="ContentDescription" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
 
-</RelativeLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/repair_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="70dp"
+            app:fabCustomSize="60dp"
+            app:srcCompat="@drawable/ic_repair"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/refill_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="70dp"
+            app:fabCustomSize="60dp"
+            app:srcCompat="@drawable/ic_refill"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/washer_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="70dp"
+            app:fabCustomSize="60dp"
+            app:srcCompat="@drawable/ic_washer"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/other_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="70dp"
+            app:fabCustomSize="60dp"
+            app:srcCompat="@drawable/ic_other"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="60dp"
+            android:tint="#E8E7E7"
+            app:fabCustomSize="80dp"
+            app:srcCompat="@drawable/ic_add"
+            tools:ignore="ContentDescription" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</FrameLayout>

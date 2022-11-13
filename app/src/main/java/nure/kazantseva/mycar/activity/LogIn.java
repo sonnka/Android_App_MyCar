@@ -8,22 +8,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelperAuto;
-import nure.kazantseva.mycar.db.DBHelperOther;
-import nure.kazantseva.mycar.db.DBHelperRefill;
-import nure.kazantseva.mycar.db.DBHelperWasher;
 import nure.kazantseva.mycar.db.DbHelperUser;
-import nure.kazantseva.mycar.model.Other;
-import nure.kazantseva.mycar.model.User;
-import nure.kazantseva.mycar.model.Washer;
 import nure.kazantseva.mycar.utils.InputValidator;
 
-public class MainActivity extends AppCompatActivity {
-    private final AppCompatActivity activity = MainActivity.this;
+public class LogIn extends AppCompatActivity {
+    private final AppCompatActivity activity = LogIn.this;
 
     private EditText email, password;
     private InputValidator inputValidator;
@@ -33,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_log_in);
 
         initObjects();
     }
@@ -73,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAvailableData(String email) {
         if(dbHelperAuto.checkByEmail(email) > 0){
-            Intent intent = new Intent(this.getApplicationContext(), ListOfExpenses.class);
+            Intent intent = new Intent(this.getApplicationContext(), MainPage.class);
             intent.putExtra("email",email);
             this.finish();
             startActivity(intent);

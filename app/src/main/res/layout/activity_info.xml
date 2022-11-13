@@ -14,11 +14,19 @@
         android:layout_height="wrap_content">
 
         <ImageButton
+            android:id="@+id/back"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:background="@color/color1"
+            app:srcCompat="@drawable/ic_back"
+            android:onClick="back"/>
+
+        <ImageButton
             android:id="@+id/edit"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/color1"
-            android:layout_marginLeft="270dp"
+            android:layout_marginLeft="220dp"
             android:src="@drawable/ic_edit"
             android:onClick="editExpense"/>
 

@@ -12,8 +12,8 @@
     <color name="color3">#A4EBF3</color>
     <color name="color4">#F4F9F9</color>
     <color name="grey">#878787</color>
-    <color name="repair">#F6ECF7</color>
-    <color name="refill">#EBFBEA</color>
-    <color name="washer">#E1F4F6</color>
-    <color name="other">#FDFDE8</color>
+    <color name="repair">#F5D4F8</color>
+    <color name="refill">#D5F6D3</color>
+    <color name="washer">#BBF1F6</color>
+    <color name="other">#FDFDD4</color>
 </resources>

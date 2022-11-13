@@ -2,6 +2,7 @@ package nure.kazantseva.mycar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,8 +12,10 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,12 +33,11 @@ import nure.kazantseva.mycar.db.DBHelperWasher;
 import nure.kazantseva.mycar.model.Other;
 import nure.kazantseva.mycar.model.Washer;
 
-public class ListOfExpenses extends AppCompatActivity {
+public class ListOfExpenses extends Fragment {
 
     FloatingActionButton fab, fab1, fab2, fab3, fab4;
     Boolean isFABOpen = false;
     int auto_id;
-    DBHelperAuto dbHelperAuto;
     DBHelperRefill dbHelperRefill;
     DBHelperRepair dbHelperRepair;
     DBHelperWasher dbHelperWasher;
@@ -45,55 +47,38 @@ public class ListOfExpenses extends AppCompatActivity {
     ArrayList<Integer> expense_id;
 
 
+
+    public ListOfExpenses(){
+
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_of_expenses);
-
-       getExtra();
-        init();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_list_of_expenses, container, false);
+        init(v);
+        return v;
     }
 
-    private void getExtra(){
-        dbHelperAuto = new DBHelperAuto(this.getApplicationContext());
-
-        Bundle arguments = getIntent().getExtras();
-        if(arguments != null){
-            if(arguments.containsKey("email")) {
-                String email = arguments.getString("email");
-                auto_id = dbHelperAuto.findByEmail(email);
-            }
-            if(arguments.containsKey("id")){
-                auto_id = arguments.getInt("id");
-            }
-        }else{
-            Toast.makeText(this.getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(),ListOfExpenses.class);
-            this.finish();
-            startActivity(intent);
-        }
-    }
-
-    public void init(){
-
+    public void init(View v){
+        auto_id = MainPage.getAuto_id();
         text = new ArrayList<>();
         date = new ArrayList<>();
         price = new ArrayList<>();
         layout = new ArrayList<>();
         expense_id = new ArrayList<>();
 
-        dbHelperRefill = new DBHelperRefill(this.getApplicationContext());
-        dbHelperRepair = new DBHelperRepair(this.getApplicationContext());
-        dbHelperWasher = new DBHelperWasher(this.getApplicationContext());
-        dbHelperOther = new DBHelperOther(this.getApplicationContext());
+        dbHelperRefill = new DBHelperRefill(this.getActivity());
+        dbHelperRepair = new DBHelperRepair(this.getActivity());
+        dbHelperWasher = new DBHelperWasher(this.getActivity());
+        dbHelperOther = new DBHelperOther(this.getActivity());
 
-        RecyclerView recyclerView = findViewById(R.id.recycle_view);
+        RecyclerView recyclerView = v.findViewById(R.id.recycle_view);
 
-        fab = findViewById(R.id.add_button);
-        fab1 = findViewById(R.id.other_button);
-        fab2 = findViewById(R.id.washer_button);
-        fab3 = findViewById(R.id.refill_button);
-        fab4 = findViewById(R.id.repair_button);
+        fab = v.findViewById(R.id.add_button);
+        fab1 = v.findViewById(R.id.other_button);
+        fab2 = v.findViewById(R.id.washer_button);
+        fab3 = v.findViewById(R.id.refill_button);
+        fab4 = v.findViewById(R.id.repair_button);
         fab.setOnClickListener(view -> {
             if(!isFABOpen){
                 showFABMenu();
@@ -102,33 +87,34 @@ public class ListOfExpenses extends AppCompatActivity {
             }
         });
 
+
         fab1.setOnClickListener(view ->{
-            Intent intent = new Intent(ListOfExpenses.this,AddOther.class);
+            Intent intent = new Intent(this.getActivity(),AddOther.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab2.setOnClickListener(view ->{
-            Intent intent = new Intent(ListOfExpenses.this, AddWasher.class);
+            Intent intent = new Intent(this.getActivity(),AddWasher.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab3.setOnClickListener(view ->{
-            Intent intent = new Intent(ListOfExpenses.this,AddRefill.class);
+            Intent intent = new Intent(this.getActivity(),AddRefill.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab4.setOnClickListener(view ->{
-            Intent intent = new Intent(ListOfExpenses.this,AddRepair.class);
+            Intent intent = new Intent(this.getActivity(),AddRepair.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
 
         displayData();
 
-        expensesAdapter = new ExpensesAdapter(this.getApplicationContext(),expense_id,auto_id,
+        expensesAdapter = new ExpensesAdapter(this.getActivity(),expense_id,auto_id,
                 layout,text,date,price);
         recyclerView.setAdapter(expensesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ListOfExpenses.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
     }
 
@@ -151,11 +137,11 @@ public class ListOfExpenses extends AppCompatActivity {
     private void displayData(){
         Cursor cursor1 = dbHelperRefill.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
-            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor1.moveToNext()){
                 expense_id.add(cursor1.getInt(0));
-                layout.add("#EBFBEA");
+                layout.add("#D5F6D3");
                 text.add("Заправка");
                 date.add(cursor1.getString(2));
                 price.add(cursor1.getString(6));
@@ -165,11 +151,11 @@ public class ListOfExpenses extends AppCompatActivity {
 
         cursor1 = dbHelperRepair.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
-            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor1.moveToNext()){
                 expense_id.add(cursor1.getInt(0));
-                layout.add("#F6ECF7");
+                layout.add("#F5D4F8");
                 text.add("Ремонт");
                 date.add(cursor1.getString(2));
                 price.add(cursor1.getString(5));
@@ -179,11 +165,11 @@ public class ListOfExpenses extends AppCompatActivity {
 
         cursor1 = dbHelperWasher.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
-            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor1.moveToNext()){
                 expense_id.add(cursor1.getInt(0));
-                layout.add("#E1F4F6");
+                layout.add("#BBF1F6");
                 text.add("Автомийка");
                 date.add(cursor1.getString(2));
                 price.add(cursor1.getString(3));
@@ -192,11 +178,11 @@ public class ListOfExpenses extends AppCompatActivity {
 
         cursor1 = dbHelperOther.readAllDateByAutoId(auto_id);
         if(cursor1.getCount() == 0){
-            Toast.makeText(ListOfExpenses.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor1.moveToNext()){
                 expense_id.add(cursor1.getInt(0));
-                layout.add("#FDFDE8");
+                layout.add("#FDFDD4");
                 text.add("Інше");
                 date.add(cursor1.getString(2));
                 price.add(cursor1.getString(4));

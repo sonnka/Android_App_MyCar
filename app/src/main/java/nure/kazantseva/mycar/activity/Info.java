@@ -213,32 +213,43 @@ public class Info extends AppCompatActivity {
         switch(typeOfExpense){
             case "Ремонт":{
                 dbHelperRepair.deleteRepair(expense_id);
-                ListOfExpenses listOfExpenses = new ListOfExpenses();
-                listOfExpenses.init();
+                Intent intent = new Intent(this, ListOfExpenses.class);
+                intent.putExtra("id", auto_id);
                 this.finish();
+                startActivity(intent);
                 break;
             }
             case "Заправка": {
                 dbHelperRefill.deleteRefill(expense_id);
-                ListOfExpenses listOfExpenses = new ListOfExpenses();
-                listOfExpenses.init();
+                Intent intent = new Intent(this, ListOfExpenses.class);
+                intent.putExtra("id", auto_id);
                 this.finish();
+                startActivity(intent);
                 break;
             }
             case "Автомийка": {
                 dbHelperWasher.deleteWasher(expense_id);
-                ListOfExpenses listOfExpenses = new ListOfExpenses();
-                listOfExpenses.init();
+                Intent intent = new Intent(this, ListOfExpenses.class);
+                intent.putExtra("id", auto_id);
                 this.finish();
+                startActivity(intent);
                 break;
             }
             default:  {
                 dbHelperOther.deleteOther(expense_id);
-                ListOfExpenses listOfExpenses = new ListOfExpenses();
-                listOfExpenses.init();
+                Intent intent = new Intent(this, ListOfExpenses.class);
+                intent.putExtra("id", auto_id);
                 this.finish();
+                startActivity(intent);
                 break;
             }
         }
+    }
+
+    public void back(View view) {
+        Intent intent = new Intent(this, MainPage.class);
+        intent.putExtra("id",auto_id);
+        startActivity(intent);
+        this.finish();
     }
 }

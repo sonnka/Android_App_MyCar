@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Витрати"
+        android:id="@+id/expenses"
+        android:icon="@drawable/ic_list"/>
+    <item android:title="Головна"
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"/>
+    <item android:title="Статистика"
+        android:id="@+id/statistic"
+        android:icon="@drawable/ic_statistic"/>
+</menu>
