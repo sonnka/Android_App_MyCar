@@ -134,10 +134,10 @@ public class AddOther extends AppCompatActivity {
                     dbHelperOther.addOther(other);
                 }
                 Toast.makeText(this.getApplicationContext(),"New other created!",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, ListOfExpenses.class);
+                Intent intent = new Intent(this, MainPage.class);
                 intent.putExtra("id",auto_id);
-                this.finish();
                 startActivity(intent);
+                this.finish();
             }else{
                 Toast.makeText(this.getApplicationContext(),"Not convert date!",Toast.LENGTH_LONG).show();
             }

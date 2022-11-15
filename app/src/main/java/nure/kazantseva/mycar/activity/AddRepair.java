@@ -142,10 +142,10 @@ public class AddRepair extends AppCompatActivity {
                     dbHelperRepair.addRepair(repair);
                 }
                 Toast.makeText(this.getApplicationContext(), "New repair created!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, ListOfExpenses.class);
-                intent.putExtra("id", auto_id);
-                this.finish();
+                Intent intent = new Intent(this, MainPage.class);
+                intent.putExtra("id",auto_id);
                 startActivity(intent);
+                this.finish();
             } else {
                 Toast.makeText(this.getApplicationContext(), "Not convert date!", Toast.LENGTH_LONG).show();
             }

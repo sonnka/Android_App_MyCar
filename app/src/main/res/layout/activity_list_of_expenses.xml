@@ -1,85 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color4"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    tools:context=".activity.ListOfExpenses">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <SearchView
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="260dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/color3"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+                    <ImageButton
+                        android:id="@+id/sortDate"
+                        android:layout_width="60dp"
+                        android:layout_height="35dp"
+                        android:background="@color/color2"
+                        android:clickable="true"
+                        android:src="@drawable/ic_sort" />
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="15dp"
+                        android:text="За датою"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="vertical">
+                    <ImageButton
+                        android:id="@+id/sortPrice"
+                        android:layout_width="60dp"
+                        android:layout_height="35dp"
+                        android:background="@color/color2"
+                        android:clickable="true"
+                        android:src="@drawable/ic_sort" />
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="15dp"
+                        android:text="За ціною"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="scrollable">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/allTab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Усі"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/repairTab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Ремонт"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/refillTab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Заправка"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/washerTab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Мийка"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/otherTab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Інше"/>
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/repair_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginLeft="320dp"
+        android:layout_marginBottom="70dp"
+        app:fabCustomSize="60dp"
+        app:srcCompat="@drawable/ic_repair"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/refill_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginLeft="320dp"
+        android:layout_marginBottom="70dp"
+        app:fabCustomSize="60dp"
+        app:srcCompat="@drawable/ic_refill"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/washer_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginLeft="320dp"
+        android:layout_marginBottom="70dp"
+        app:fabCustomSize="60dp"
+        app:srcCompat="@drawable/ic_washer"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/other_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginLeft="320dp"
+        android:layout_marginBottom="70dp"
+        app:fabCustomSize="60dp"
+        app:srcCompat="@drawable/ic_other"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="690dp"
+        android:layout_marginLeft="310dp"
+        android:layout_marginBottom="65dp"
+        android:tint="#E8E7E7"
+        app:fabCustomSize="80dp"
+        app:srcCompat="@drawable/ic_add"
+        tools:ignore="ContentDescription" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:isScrollContainer="true"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/repair_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="70dp"
-            app:fabCustomSize="60dp"
-            app:srcCompat="@drawable/ic_repair"
-            tools:ignore="ContentDescription" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/refill_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="70dp"
-            app:fabCustomSize="60dp"
-            app:srcCompat="@drawable/ic_refill"
-            tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/washer_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="70dp"
-            app:fabCustomSize="60dp"
-            app:srcCompat="@drawable/ic_washer"
-            tools:ignore="ContentDescription" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/other_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="70dp"
-            app:fabCustomSize="60dp"
-            app:srcCompat="@drawable/ic_other"
-            tools:ignore="ContentDescription" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="60dp"
-            android:tint="#E8E7E7"
-            app:fabCustomSize="80dp"
-            app:srcCompat="@drawable/ic_add"
-            tools:ignore="ContentDescription" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_view"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-    </RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="110dp"
+                android:isScrollContainer="true"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:scrollbarAlwaysDrawVerticalTrack="true">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycle_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

@@ -1,41 +1,36 @@
 package nure.kazantseva.mycar.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.adapters.ExpensesAdapter;
-import nure.kazantseva.mycar.db.DBHelperAuto;
 import nure.kazantseva.mycar.db.DBHelperOther;
 import nure.kazantseva.mycar.db.DBHelperRefill;
 import nure.kazantseva.mycar.db.DBHelperRepair;
 import nure.kazantseva.mycar.db.DBHelperWasher;
-import nure.kazantseva.mycar.model.Other;
-import nure.kazantseva.mycar.model.Washer;
 
 public class ListOfExpenses extends Fragment {
 
     FloatingActionButton fab, fab1, fab2, fab3, fab4;
+    TabLayout tabLayout;
+    RecyclerView recyclerView;
     Boolean isFABOpen = false;
     int auto_id;
     DBHelperRefill dbHelperRefill;
@@ -45,7 +40,6 @@ public class ListOfExpenses extends Fragment {
     ExpensesAdapter expensesAdapter;
     ArrayList<String> date, price, text, layout;
     ArrayList<Integer> expense_id;
-
 
 
     public ListOfExpenses(){
@@ -72,7 +66,8 @@ public class ListOfExpenses extends Fragment {
         dbHelperWasher = new DBHelperWasher(this.getActivity());
         dbHelperOther = new DBHelperOther(this.getActivity());
 
-        RecyclerView recyclerView = v.findViewById(R.id.recycle_view);
+        recyclerView = v.findViewById(R.id.recycle_view);
+        tabLayout = v.findViewById(R.id.tabs);
 
         fab = v.findViewById(R.id.add_button);
         fab1 = v.findViewById(R.id.other_button);
@@ -109,13 +104,76 @@ public class ListOfExpenses extends Fragment {
             startActivity(intent);
         });
 
-        displayData();
+        displayAllData();
+        setAdapterOnRecycleView();
 
+        selectingTabs();
+
+    }
+
+    private void selectingTabs() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()) {
+                    case 0: {
+                        clearRecycleView();
+                        displayAllData();
+                        setAdapterOnRecycleView();
+                        break;
+                    }
+                    case 1: {
+                        clearRecycleView();
+                        displayRepair();
+                        setAdapterOnRecycleView();
+                        break;
+                    }
+                    case 2: {
+                        clearRecycleView();
+                        displayRefill();
+                        setAdapterOnRecycleView();
+                        break;
+                    }
+                    case 3: {
+                        clearRecycleView();
+                        displayWasher();
+                        setAdapterOnRecycleView();
+                        break;
+                    }
+                    case 4: {
+                        clearRecycleView();
+                        displayOther();
+                        setAdapterOnRecycleView();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    private void clearRecycleView(){
+        text = new ArrayList<>();
+        date = new ArrayList<>();
+        price = new ArrayList<>();
+        layout = new ArrayList<>();
+        expense_id = new ArrayList<>();
+    }
+
+    private void setAdapterOnRecycleView() {
         expensesAdapter = new ExpensesAdapter(this.getActivity(),expense_id,auto_id,
                 layout,text,date,price);
         recyclerView.setAdapter(expensesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-
     }
 
     private void showFABMenu(){
@@ -134,61 +192,71 @@ public class ListOfExpenses extends Fragment {
         fab4.animate().translationY(0);
     }
 
-    private void displayData(){
-        Cursor cursor1 = dbHelperRefill.readAllDateByAutoId(auto_id);
-        if(cursor1.getCount() == 0){
+    private void displayAllData(){
+        displayRepair();
+        displayRefill();
+        displayWasher();
+        displayOther();
+    }
+
+    private void displayRepair(){
+        Cursor cursor = dbHelperRepair.readAllDateByAutoId(auto_id);
+        if(cursor.getCount() == 0){
             Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
-            while(cursor1.moveToNext()){
-                expense_id.add(cursor1.getInt(0));
-                layout.add("#D5F6D3");
-                text.add("Заправка");
-                date.add(cursor1.getString(2));
-                price.add(cursor1.getString(6));
-            }
-        }
-
-
-        cursor1 = dbHelperRepair.readAllDateByAutoId(auto_id);
-        if(cursor1.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
-        }else{
-            while(cursor1.moveToNext()){
-                expense_id.add(cursor1.getInt(0));
+            while(cursor.moveToNext()){
+                expense_id.add(cursor.getInt(0));
                 layout.add("#F5D4F8");
                 text.add("Ремонт");
-                date.add(cursor1.getString(2));
-                price.add(cursor1.getString(5));
+                date.add(cursor.getString(2));
+                price.add(cursor.getString(5));
             }
         }
+    }
 
-
-        cursor1 = dbHelperWasher.readAllDateByAutoId(auto_id);
-        if(cursor1.getCount() == 0){
+    private void displayRefill(){
+        Cursor cursor = dbHelperRefill.readAllDateByAutoId(auto_id);
+        if(cursor.getCount() == 0){
             Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
-            while(cursor1.moveToNext()){
-                expense_id.add(cursor1.getInt(0));
+            while(cursor.moveToNext()){
+                expense_id.add(cursor.getInt(0));
+                layout.add("#D5F6D3");
+                text.add("Заправка");
+                date.add(cursor.getString(2));
+                price.add(cursor.getString(6));
+            }
+        }
+    }
+
+    private void displayWasher(){
+        Cursor cursor = dbHelperWasher.readAllDateByAutoId(auto_id);
+        if(cursor.getCount() == 0){
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor.moveToNext()){
+                expense_id.add(cursor.getInt(0));
                 layout.add("#BBF1F6");
                 text.add("Автомийка");
-                date.add(cursor1.getString(2));
-                price.add(cursor1.getString(3));
+                date.add(cursor.getString(2));
+                price.add(cursor.getString(3));
             }
         }
+    }
 
-        cursor1 = dbHelperOther.readAllDateByAutoId(auto_id);
-        if(cursor1.getCount() == 0){
+    private void displayOther(){
+        Cursor cursor = dbHelperOther.readAllDateByAutoId(auto_id);
+        if(cursor.getCount() == 0){
             Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
-            while(cursor1.moveToNext()){
-                expense_id.add(cursor1.getInt(0));
+            while(cursor.moveToNext()){
+                expense_id.add(cursor.getInt(0));
                 layout.add("#FDFDD4");
                 text.add("Інше");
-                date.add(cursor1.getString(2));
-                price.add(cursor1.getString(4));
+                date.add(cursor.getString(2));
+                price.add(cursor.getString(4));
             }
         }
-
     }
 
 }
