@@ -11,13 +11,13 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DBHelper;
 
 public class MainPage extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     BottomNavigationView bottomNavigationView;
-    DBHelperAuto dbHelperAuto;
+    DBHelper dbHelper;
     private static int auto_id;
 
     @Override
@@ -62,13 +62,13 @@ public class MainPage extends AppCompatActivity
     }
 
     private void getExtra(){
-        dbHelperAuto = new DBHelperAuto(this);
+        dbHelper= new DBHelper(this);
 
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
             if(arguments.containsKey("email")) {
                 String email = arguments.getString("email");
-                setAuto_id(dbHelperAuto.findByEmail(email));
+                setAuto_id(dbHelper.findByEmail(email));
             }
             if(arguments.containsKey("id")){
                 setAuto_id(arguments.getInt("id"));

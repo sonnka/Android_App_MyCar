@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Random;
+
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperAuto;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Auto;
 import nure.kazantseva.mycar.utils.InputValidator;
 
@@ -21,7 +23,7 @@ public class CreateAuto extends AppCompatActivity {
 
     private EditText brand, model, year, fuel, run;
     private InputValidator inputValidator;
-    private DBHelperAuto dbHelperAuto;
+    private DBHelper dbHelper;
     private String email;
     private Spinner spinner;
 
@@ -52,7 +54,7 @@ public class CreateAuto extends AppCompatActivity {
         fuel = new EditText(activity);
 
         inputValidator = new InputValidator(activity);
-        dbHelperAuto = new DBHelperAuto(activity);
+        dbHelper = new DBHelper(activity);
         spinner = findViewById(R.id.spinner);
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this
@@ -99,18 +101,29 @@ public class CreateAuto extends AppCompatActivity {
             return;
         }
         Auto auto = new Auto();
-        auto.setUser_email(email);
+        auto.setUserEmail(email);
+        auto.setUniqueCode(generateUniqueCode());
         auto.setBrand(brand.getText().toString().trim());
         auto.setModel(model.getText().toString().trim());
         auto.setYear(Integer.parseInt(year.getText().toString()));
         auto.setFuel(fuel.getText().toString().trim());
         auto.setRun(Long.parseLong(run.getText().toString()));
 
-        dbHelperAuto.addAuto(auto);
+        dbHelper.addAuto(auto);
         Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, ListOfExpenses.class);
-            intent.putExtra("id",auto.getId());
-            this.finish();
-            startActivity(intent);
+        Intent intent = new Intent(this, MainPage.class);
+        intent.putExtra("id",auto.getId());
+        startActivity(intent);
+        this.finish();
+    }
+
+    private String generateUniqueCode() {
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        String uniqueCode = String.format("%06d", number);
+        if(dbHelper.checkUniqueCode(uniqueCode)){
+            generateUniqueCode();
+        }
+        return uniqueCode;
     }
 }

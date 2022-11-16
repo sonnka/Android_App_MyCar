@@ -2,15 +2,18 @@ package nure.kazantseva.mycar.model;
 
 public class Auto {
     private int id;
-    private String user_email;
+    private String uniqueCode;
+    private String userEmail;
     private String brand;
     private String model;
     private int year;
     private String fuel;
     private long run;
 
-    public Auto(String user_email, String brand, String model, int year, String fuel, long run) {
-        this.user_email = user_email;
+    public Auto(String userEmail,String uniqueCode, String brand, String model, int year,
+                String fuel, long run) {
+        this.userEmail = userEmail;
+        this.uniqueCode = uniqueCode;
         this.brand = brand;
         this.model = model;
         this.year = year;
@@ -29,12 +32,20 @@ public class Auto {
         this.id = id;
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getUniqueCode() {
+        return uniqueCode;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setUniqueCode(String uniqueCode) {
+        this.uniqueCode = uniqueCode;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getBrand() {
@@ -81,7 +92,8 @@ public class Auto {
     public String toString() {
         return "Auto{" +
                 "id=" + id +
-                ", user_email=" + user_email +
+                ", uniqueCode=" + uniqueCode +
+                ", userEmail='" + userEmail + '\'' +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", year=" + year +

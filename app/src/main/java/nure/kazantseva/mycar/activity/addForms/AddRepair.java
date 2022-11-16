@@ -1,4 +1,4 @@
-package nure.kazantseva.mycar.activity;
+package nure.kazantseva.mycar.activity.addForms;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,27 +16,27 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperOther;
-import nure.kazantseva.mycar.db.DBHelperRepair;
-import nure.kazantseva.mycar.model.Other;
+import nure.kazantseva.mycar.activity.ListOfExpenses;
+import nure.kazantseva.mycar.activity.MainPage;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Repair;
 import nure.kazantseva.mycar.utils.InputValidator;
 
-public class AddOther extends AppCompatActivity {
+public class AddRepair extends AppCompatActivity {
 
-    EditText date,description, price;
+    EditText date,run,description, price;
     Button nextButton;
     int auto_id;
     int expense_id = 0;
     DatePickerDialog datePickerDialog;
     InputValidator inputValidator;
-    DBHelperOther dbHelperOther;
-    Other other;
+    DBHelper dbHelper;
+    Repair repair;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_other);
+        setContentView(R.layout.activity_add_repair);
 
         getExtra();
         init();
@@ -55,7 +55,7 @@ public class AddOther extends AppCompatActivity {
             }
         }else{
             Toast.makeText(this.getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(),ListOfExpenses.class);
+            Intent intent = new Intent(this.getApplicationContext(), ListOfExpenses.class);
             this.finish();
             startActivity(intent);
         }
@@ -64,34 +64,37 @@ public class AddOther extends AppCompatActivity {
     private void init(){
         date = findViewById(R.id.date);
         date.setInputType(0);
+        run = findViewById(R.id.run);
         description = findViewById(R.id.description);
         price = findViewById(R.id.price);
         nextButton = findViewById(R.id.nextButton);
         nextButton.setText("Додати запис");
 
-        other = new Other();
+        repair = new Repair();
         inputValidator = new InputValidator(this.getApplicationContext());
-        dbHelperOther = new DBHelperOther(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
     }
 
     private void edit(){
         nextButton.setText("Оновити запис");
-        Cursor cursor = dbHelperOther.findById(expense_id);
+        Cursor cursor = dbHelper.findRepairById(expense_id);
         if(cursor.getCount() == 0){
-            Toast.makeText(AddOther.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddRepair.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
-                other.setId(cursor.getInt(0));
-                other.setAuto_id(cursor.getInt(1));
-                other.setDate(LocalDate.parse(cursor.getString(2)));
-                other.setDescription(cursor.getString(3));
-                other.setPrice(cursor.getDouble(4));
+                repair.setId(cursor.getInt(0));
+                repair.setAuto_id(cursor.getInt(1));
+                repair.setDate(LocalDate.parse(cursor.getString(4)));
+                repair.setRun(cursor.getInt(5));
+                repair.setDescription(cursor.getString(6));
+                repair.setPrice(cursor.getDouble(7));
             }
         }
 
-        date.setText(inputValidator.convertStringToDateString(other.getDate().toString().trim()));
-        description.setText(other.getDescription());
-        price.setText(String.valueOf(other.getPrice()));
+        date.setText(inputValidator.convertStringToDateString(repair.getDate().toString().trim()));
+        run.setText(String.valueOf(repair.getRun()));
+        description.setText(repair.getDescription());
+        price.setText(String.valueOf(repair.getPrice()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -100,7 +103,7 @@ public class AddOther extends AppCompatActivity {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(AddOther.this,
+        datePickerDialog = new DatePickerDialog(AddRepair.this,
                 (view1, year, monthOfYear, dayOfMonth) -> date.setText(dayOfMonth + "/"
                         + (monthOfYear + 1) + "/" + year), mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -114,37 +117,41 @@ public class AddOther extends AppCompatActivity {
         if(!inputValidator.isInputEditTextFilled(date)){
             return;
         }
+        if(!inputValidator.isInputEditTextFilled(run)){
+            return;
+        }
         if(!inputValidator.isInputEditTextFilled(description)){
             return;
         }
         if(!inputValidator.isInputEditTextFilled(price)){
             return;
         }
-        if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
-            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
-                other.setAuto_id(auto_id);
-                other.setDate(inputValidator.convertToLocalDate
+        if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0) {
+            if (!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)) {
+                repair.setAuto_id(auto_id);
+                repair.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));
-                other.setDescription(description.getText().toString().trim());
-                other.setPrice(Double.parseDouble(price.getText().toString().trim()));
+                repair.setRun(Long.parseLong
+                        (run.getText().toString().trim()));
+                repair.setDescription(description.getText().toString().trim());
+                repair.setPrice(Double.parseDouble(price.getText().toString().trim()));
 
                 if (expense_id != 0) {
-                    dbHelperOther.updateOther(other);
+                    dbHelper.updateRepair(repair);
                 } else {
-                    dbHelperOther.addOther(other);
+                    dbHelper.addRepair(repair);
                 }
-                Toast.makeText(this.getApplicationContext(),"New other created!",Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getApplicationContext(), "New repair created!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, MainPage.class);
                 intent.putExtra("id",auto_id);
                 startActivity(intent);
                 this.finish();
-            }else{
-                Toast.makeText(this.getApplicationContext(),"Not convert date!",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this.getApplicationContext(), "Not convert date!", Toast.LENGTH_LONG).show();
             }
         }else{
             Toast.makeText(this.getApplicationContext(),"Not valid date!",Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void back(View view) {

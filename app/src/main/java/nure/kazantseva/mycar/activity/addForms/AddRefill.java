@@ -1,4 +1,4 @@
-package nure.kazantseva.mycar.activity;
+package nure.kazantseva.mycar.activity.addForms;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,27 +16,28 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperRefill;
-import nure.kazantseva.mycar.db.DBHelperRepair;
+import nure.kazantseva.mycar.activity.ListOfExpenses;
+import nure.kazantseva.mycar.activity.MainPage;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Refill;
-import nure.kazantseva.mycar.model.Repair;
 import nure.kazantseva.mycar.utils.InputValidator;
 
-public class AddRepair extends AppCompatActivity {
+public class AddRefill extends AppCompatActivity {
 
-    EditText date,run,description, price;
+    EditText date,run,beforeRefill, addFuel, price,station;
     Button nextButton;
     int auto_id;
     int expense_id = 0;
     DatePickerDialog datePickerDialog;
     InputValidator inputValidator;
-    DBHelperRepair dbHelperRepair;
-    Repair repair;
+    DBHelper dbHelper;
+    Refill refill;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_repair);
+        setContentView(R.layout.activity_add_refill);
 
         getExtra();
         init();
@@ -55,46 +56,52 @@ public class AddRepair extends AppCompatActivity {
             }
         }else{
             Toast.makeText(this.getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(),ListOfExpenses.class);
+            Intent intent = new Intent(this.getApplicationContext(), ListOfExpenses.class);
             this.finish();
             startActivity(intent);
         }
     }
 
-    private void init(){
+    public void init(){
         date = findViewById(R.id.date);
         date.setInputType(0);
         run = findViewById(R.id.run);
-        description = findViewById(R.id.description);
+        beforeRefill = findViewById(R.id.beforeRefill);
+        addFuel = findViewById(R.id.addFuel);
         price = findViewById(R.id.price);
+        station = findViewById(R.id.station);
         nextButton = findViewById(R.id.nextButton);
         nextButton.setText("Додати запис");
 
-        repair = new Repair();
+        refill = new Refill();
         inputValidator = new InputValidator(this.getApplicationContext());
-        dbHelperRepair = new DBHelperRepair(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
     }
 
     private void edit(){
         nextButton.setText("Оновити запис");
-        Cursor cursor = dbHelperRepair.findById(expense_id);
+        Cursor cursor = dbHelper.findRefillById(expense_id);
         if(cursor.getCount() == 0){
-            Toast.makeText(AddRepair.this,"No data!",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddRefill.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
-                repair.setId(cursor.getInt(0));
-                repair.setAuto_id(cursor.getInt(1));
-                repair.setDate(LocalDate.parse(cursor.getString(2)));
-                repair.setRun(cursor.getInt(3));
-                repair.setDescription(cursor.getString(4));
-                repair.setPrice(cursor.getDouble(5));
+                refill.setId(cursor.getInt(0));
+                refill.setAuto_id(cursor.getInt(1));
+                refill.setDate(LocalDate.parse(cursor.getString(4)));
+                refill.setRun(cursor.getInt(5));
+                refill.setBeforeRefill(cursor.getDouble(6));
+                refill.setAddFuel(cursor.getDouble(7));
+                refill.setPrice(cursor.getDouble(8));
+                refill.setStation(cursor.getString(9));
             }
         }
 
-        date.setText(inputValidator.convertStringToDateString(repair.getDate().toString().trim()));
-        run.setText(String.valueOf(repair.getRun()));
-        description.setText(repair.getDescription());
-        price.setText(String.valueOf(repair.getPrice()));
+        date.setText(inputValidator.convertStringToDateString(refill.getDate().toString().trim()));
+        run.setText(String.valueOf(refill.getRun()));
+        beforeRefill.setText(String.valueOf(refill.getBeforeRefill()));
+        addFuel.setText(String.valueOf(refill.getAddFuel()));
+        price.setText(String.valueOf(refill.getPrice()));
+        station.setText(refill.getStation());
     }
 
     @SuppressLint("SetTextI18n")
@@ -103,7 +110,7 @@ public class AddRepair extends AppCompatActivity {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(AddRepair.this,
+        datePickerDialog = new DatePickerDialog(AddRefill.this,
                 (view1, year, monthOfYear, dayOfMonth) -> date.setText(dayOfMonth + "/"
                         + (monthOfYear + 1) + "/" + year), mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -120,38 +127,48 @@ public class AddRepair extends AppCompatActivity {
         if(!inputValidator.isInputEditTextFilled(run)){
             return;
         }
-        if(!inputValidator.isInputEditTextFilled(description)){
+        if(!inputValidator.isInputEditTextFilled(beforeRefill)){
+            return;
+        }
+        if(!inputValidator.isInputEditTextFilled(addFuel)){
             return;
         }
         if(!inputValidator.isInputEditTextFilled(price)){
             return;
         }
-        if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0) {
-            if (!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)) {
-                repair.setAuto_id(auto_id);
-                repair.setDate(inputValidator.convertToLocalDate
+        if(!inputValidator.isInputEditTextFilled(station)){
+            return;
+        }
+        if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
+            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
+                refill.setAuto_id(auto_id);
+                refill.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));
-                repair.setRun(Long.parseLong
+                refill.setRun(Long.parseLong
                         (run.getText().toString().trim()));
-                repair.setDescription(description.getText().toString().trim());
-                repair.setPrice(Double.parseDouble(price.getText().toString().trim()));
+                refill.setBeforeRefill(Double.parseDouble
+                        (beforeRefill.getText().toString().trim()));
+                refill.setAddFuel(Double.parseDouble(addFuel.getText().toString().trim()));
+                refill.setPrice(Double.parseDouble(price.getText().toString().trim()));
+                refill.setStation(station.getText().toString().trim());
 
                 if (expense_id != 0) {
-                    dbHelperRepair.updateRepair(repair);
+                    dbHelper.updateRefill(refill);
                 } else {
-                    dbHelperRepair.addRepair(repair);
+                    dbHelper.addRefill(refill);
                 }
-                Toast.makeText(this.getApplicationContext(), "New repair created!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getApplicationContext(),"New refill created!",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, MainPage.class);
                 intent.putExtra("id",auto_id);
                 startActivity(intent);
                 this.finish();
-            } else {
-                Toast.makeText(this.getApplicationContext(), "Not convert date!", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(this.getApplicationContext(),"Not convert date!",Toast.LENGTH_LONG).show();
             }
         }else{
             Toast.makeText(this.getApplicationContext(),"Not valid date!",Toast.LENGTH_LONG).show();
         }
+
     }
 
     public void back(View view) {

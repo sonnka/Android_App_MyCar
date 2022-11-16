@@ -9,8 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperAuto;
-import nure.kazantseva.mycar.db.DbHelperUser;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class LogIn extends AppCompatActivity {
@@ -18,8 +17,7 @@ public class LogIn extends AppCompatActivity {
 
     private EditText email, password;
     private InputValidator inputValidator;
-    private DbHelperUser dbHelperUser;
-    private DBHelperAuto dbHelperAuto;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +32,7 @@ public class LogIn extends AppCompatActivity {
         password = findViewById(R.id.password);
 
         inputValidator = new InputValidator(activity);
-        dbHelperUser = new DbHelperUser(activity);
-        dbHelperAuto = new DBHelperAuto(activity);
+        dbHelper = new DBHelper(activity);
 
     }
 
@@ -53,8 +50,8 @@ public class LogIn extends AppCompatActivity {
         if(!inputValidator.isInputEditTextEmail(email)){
             return;
         }
-        if(dbHelperUser.checkUser(email.getText().toString().trim()) &&
-                dbHelperUser.checkUser(email.getText().toString().trim()
+        if(dbHelper.checkUser(email.getText().toString().trim()) &&
+                dbHelper.checkUser(email.getText().toString().trim()
                 ,password.getText().toString().trim())){
             checkAvailableData(email.getText().toString().trim());
         }else{
@@ -63,7 +60,7 @@ public class LogIn extends AppCompatActivity {
     }
 
     private void checkAvailableData(String email) {
-        if(dbHelperAuto.checkByEmail(email) > 0){
+        if(dbHelper.checkByEmail(email) > 0){
             Intent intent = new Intent(this.getApplicationContext(), MainPage.class);
             intent.putExtra("email",email);
             this.finish();
@@ -85,5 +82,6 @@ public class LogIn extends AppCompatActivity {
     public void onClickSignUp(View view) {
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
+        this.finish();
     }
 }

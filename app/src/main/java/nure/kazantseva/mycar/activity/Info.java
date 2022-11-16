@@ -13,11 +13,11 @@ import android.widget.Toast;
 import java.time.LocalDate;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperAuto;
-import nure.kazantseva.mycar.db.DBHelperOther;
-import nure.kazantseva.mycar.db.DBHelperRefill;
-import nure.kazantseva.mycar.db.DBHelperRepair;
-import nure.kazantseva.mycar.db.DBHelperWasher;
+import nure.kazantseva.mycar.activity.addForms.AddOther;
+import nure.kazantseva.mycar.activity.addForms.AddRefill;
+import nure.kazantseva.mycar.activity.addForms.AddRepair;
+import nure.kazantseva.mycar.activity.addForms.AddWasher;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Other;
 import nure.kazantseva.mycar.model.Refill;
 import nure.kazantseva.mycar.model.Repair;
@@ -29,11 +29,7 @@ public class Info extends AppCompatActivity {
     int auto_id;
     int expense_id;
     String typeOfExpense;
-    DBHelperAuto dbHelperAuto;
-    DBHelperRefill dbHelperRefill;
-    DBHelperRepair dbHelperRepair;
-    DBHelperWasher dbHelperWasher;
-    DBHelperOther dbHelperOther;
+    DBHelper dbHelper;
     InputValidator inputValidator;
     ImageButton edit, delete;
 
@@ -49,7 +45,7 @@ public class Info extends AppCompatActivity {
     }
 
     private void getExtra(){
-        dbHelperAuto = new DBHelperAuto(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
             if(arguments.containsKey("AutoId")) {
@@ -70,10 +66,7 @@ public class Info extends AppCompatActivity {
     }
 
     private void init() {
-        dbHelperRefill = new DBHelperRefill(this.getApplicationContext());
-        dbHelperRepair = new DBHelperRepair(this.getApplicationContext());
-        dbHelperWasher = new DBHelperWasher(this.getApplicationContext());
-        dbHelperOther = new DBHelperOther(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
         inputValidator = new InputValidator(this);
 
         text = findViewById(R.id.text);
@@ -96,7 +89,7 @@ public class Info extends AppCompatActivity {
     }
 
     private void getRepair(){
-        Cursor cursor = dbHelperRepair.findById(expense_id);
+        Cursor cursor = dbHelper.findRepairById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(Info.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
@@ -104,10 +97,10 @@ public class Info extends AppCompatActivity {
             while(cursor.moveToNext()){
                 repair.setId(cursor.getInt(0));
                 repair.setAuto_id(cursor.getInt(1));
-                repair.setDate(LocalDate.parse(cursor.getString(2)));
-                repair.setRun(cursor.getInt(3));
-                repair.setDescription(cursor.getString(4));
-                repair.setPrice(cursor.getDouble(5));
+                repair.setDate(LocalDate.parse(cursor.getString(4)));
+                repair.setRun(cursor.getInt(5));
+                repair.setDescription(cursor.getString(6));
+                repair.setPrice(cursor.getDouble(7));
 
                 info.setText(repair.toString());
             }
@@ -115,7 +108,7 @@ public class Info extends AppCompatActivity {
     }
 
     private void getRefill(){
-        Cursor cursor = dbHelperRefill.findById(expense_id);
+        Cursor cursor = dbHelper.findRefillById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(Info.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
@@ -123,19 +116,19 @@ public class Info extends AppCompatActivity {
             while(cursor.moveToNext()){
                 refill.setId(cursor.getInt(0));
                 refill.setAuto_id(cursor.getInt(1));
-                refill.setDate(LocalDate.parse(cursor.getString(2)));
-                refill.setRun(cursor.getInt(3));
-                refill.setBeforeRefill(cursor.getDouble(4));
-                refill.setAddFuel(cursor.getDouble(5));
-                refill.setPrice(cursor.getDouble(6));
-                refill.setStation(cursor.getString(7));
+                refill.setDate(LocalDate.parse(cursor.getString(4)));
+                refill.setRun(cursor.getInt(5));
+                refill.setBeforeRefill(cursor.getDouble(6));
+                refill.setAddFuel(cursor.getDouble(7));
+                refill.setPrice(cursor.getDouble(8));
+                refill.setStation(cursor.getString(9));
                 info.setText(refill.toString());
             }
         }
     }
 
     private void getWasher(){
-        Cursor cursor = dbHelperWasher.findById(expense_id);
+        Cursor cursor = dbHelper.findWasherById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(Info.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
@@ -143,15 +136,15 @@ public class Info extends AppCompatActivity {
             while(cursor.moveToNext()){
                 washer.setId(cursor.getInt(0));
                 washer.setAuto_id(cursor.getInt(1));
-                washer.setDate(LocalDate.parse(cursor.getString(2)));
-                washer.setPrice(cursor.getDouble(3));
+                washer.setDate(LocalDate.parse(cursor.getString(4)));
+                washer.setPrice(cursor.getDouble(5));
                 info.setText(washer.toString());
             }
         }
     }
 
     private void getOther(){
-        Cursor cursor = dbHelperOther.findById(expense_id);
+        Cursor cursor = dbHelper.findOtherById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(Info.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
@@ -159,9 +152,9 @@ public class Info extends AppCompatActivity {
             while(cursor.moveToNext()){
                 other.setId(cursor.getInt(0));
                 other.setAuto_id(cursor.getInt(1));
-                other.setDate(LocalDate.parse(cursor.getString(2)));
-                other.setDescription(cursor.getString(3));
-                other.setPrice(cursor.getDouble(4));
+                other.setDate(LocalDate.parse(cursor.getString(4)));
+                other.setDescription(cursor.getString(5));
+                other.setPrice(cursor.getDouble(6));
 
                 info.setText(other.toString());
             }
@@ -175,8 +168,8 @@ public class Info extends AppCompatActivity {
                 intent.putExtra("id",auto_id);
                 intent.putExtra("ExpenseId",expense_id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                this.finish();
                 startActivity(intent);
+                this.finish();
                 break;
             }
             case "Заправка": {
@@ -184,8 +177,8 @@ public class Info extends AppCompatActivity {
                 intent.putExtra("id",auto_id);
                 intent.putExtra("ExpenseId",expense_id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                this.finish();
                 startActivity(intent);
+                this.finish();
                 break;
             }
             case "Автомийка": {
@@ -193,8 +186,8 @@ public class Info extends AppCompatActivity {
                 intent.putExtra("id",auto_id);
                 intent.putExtra("ExpenseId",expense_id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                this.finish();
                 startActivity(intent);
+                this.finish();
                 break;
             }
             default: {
@@ -202,8 +195,8 @@ public class Info extends AppCompatActivity {
                 intent.putExtra("id",auto_id);
                 intent.putExtra("ExpenseId",expense_id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                this.finish();
                 startActivity(intent);
+                this.finish();
                 break;
             }
         }
@@ -212,22 +205,22 @@ public class Info extends AppCompatActivity {
     public void deleteExpense(View view) {
         switch(typeOfExpense){
             case "Ремонт":{
-                dbHelperRepair.deleteRepair(expense_id);
+                dbHelper.deleteRepair(expense_id);
                 back(view);
                 break;
             }
             case "Заправка": {
-                dbHelperRefill.deleteRefill(expense_id);
+                dbHelper.deleteRefill(expense_id);
                 back(view);
                 break;
             }
             case "Автомийка": {
-                dbHelperWasher.deleteWasher(expense_id);
+                dbHelper.deleteWasher(expense_id);
                 back(view);
                 break;
             }
             default:  {
-                dbHelperOther.deleteOther(expense_id);
+                dbHelper.deleteOther(expense_id);
                 back(view);
                 break;
             }

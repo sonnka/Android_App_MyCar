@@ -11,32 +11,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 import nure.kazantseva.mycar.R;
+import nure.kazantseva.mycar.activity.addForms.AddOther;
+import nure.kazantseva.mycar.activity.addForms.AddRefill;
+import nure.kazantseva.mycar.activity.addForms.AddRepair;
+import nure.kazantseva.mycar.activity.addForms.AddWasher;
 import nure.kazantseva.mycar.adapters.ExpensesAdapter;
-import nure.kazantseva.mycar.db.DBHelperOther;
-import nure.kazantseva.mycar.db.DBHelperRefill;
-import nure.kazantseva.mycar.db.DBHelperRepair;
-import nure.kazantseva.mycar.db.DBHelperWasher;
+import nure.kazantseva.mycar.db.DBHelper;
 
 public class ListOfExpenses extends Fragment {
 
     FloatingActionButton fab, fab1, fab2, fab3, fab4;
     TabLayout tabLayout;
+    SearchView searchView;
     RecyclerView recyclerView;
     Boolean isFABOpen = false;
     int auto_id;
-    DBHelperRefill dbHelperRefill;
-    DBHelperRepair dbHelperRepair;
-    DBHelperWasher dbHelperWasher;
-    DBHelperOther dbHelperOther;
+    DBHelper dbHelper;
     ExpensesAdapter expensesAdapter;
     ArrayList<String> date, price, text, layout;
     ArrayList<Integer> expense_id;
@@ -61,13 +60,11 @@ public class ListOfExpenses extends Fragment {
         layout = new ArrayList<>();
         expense_id = new ArrayList<>();
 
-        dbHelperRefill = new DBHelperRefill(this.getActivity());
-        dbHelperRepair = new DBHelperRepair(this.getActivity());
-        dbHelperWasher = new DBHelperWasher(this.getActivity());
-        dbHelperOther = new DBHelperOther(this.getActivity());
+        dbHelper = new DBHelper(this.getActivity());
 
         recyclerView = v.findViewById(R.id.recycle_view);
         tabLayout = v.findViewById(R.id.tabs);
+        searchView = v.findViewById(R.id.search);
 
         fab = v.findViewById(R.id.add_button);
         fab1 = v.findViewById(R.id.other_button);
@@ -84,25 +81,49 @@ public class ListOfExpenses extends Fragment {
 
 
         fab1.setOnClickListener(view ->{
-            Intent intent = new Intent(this.getActivity(),AddOther.class);
+            Intent intent = new Intent(this.getActivity(), AddOther.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab2.setOnClickListener(view ->{
-            Intent intent = new Intent(this.getActivity(),AddWasher.class);
+            Intent intent = new Intent(this.getActivity(), AddWasher.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab3.setOnClickListener(view ->{
-            Intent intent = new Intent(this.getActivity(),AddRefill.class);
+            Intent intent = new Intent(this.getActivity(), AddRefill.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
         fab4.setOnClickListener(view ->{
-            Intent intent = new Intent(this.getActivity(),AddRepair.class);
+            Intent intent = new Intent(this.getActivity(), AddRepair.class);
             intent.putExtra("id",auto_id);
             startActivity(intent);
         });
+
+
+
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filterDate(newText);
+//                return false;
+//            }
+//        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                clearRecycleView();
+//                displayAllData();
+//                setAdapterOnRecycleView();
+//                return false;
+//            }
+//        });
 
         displayAllData();
         setAdapterOnRecycleView();
@@ -110,6 +131,13 @@ public class ListOfExpenses extends Fragment {
         selectingTabs();
 
     }
+
+//    private void filterDate(String searchText){
+//        Cursor cursor = dbHelper.searchByDate(auto_id, searchText);
+//        clearRecycleView();
+//        fillData(cursor);
+//        setAdapterOnRecycleView();
+//    }
 
     private void selectingTabs() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -192,71 +220,44 @@ public class ListOfExpenses extends Fragment {
         fab4.animate().translationY(0);
     }
 
+    @SuppressLint("Range")
     private void displayAllData(){
-        displayRepair();
-        displayRefill();
-        displayWasher();
-        displayOther();
+        Cursor cursor = dbHelper.readAllDataByAutoId(auto_id);
+        fillData(cursor);
     }
 
-    private void displayRepair(){
-        Cursor cursor = dbHelperRepair.readAllDateByAutoId(auto_id);
+    private void fillData(Cursor cursor){
         if(cursor.getCount() == 0){
             Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
                 expense_id.add(cursor.getInt(0));
-                layout.add("#F5D4F8");
-                text.add("Ремонт");
-                date.add(cursor.getString(2));
-                price.add(cursor.getString(5));
-            }
-        }
-    }
-
-    private void displayRefill(){
-        Cursor cursor = dbHelperRefill.readAllDateByAutoId(auto_id);
-        if(cursor.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
-        }else{
-            while(cursor.moveToNext()){
-                expense_id.add(cursor.getInt(0));
-                layout.add("#D5F6D3");
-                text.add("Заправка");
-                date.add(cursor.getString(2));
-                price.add(cursor.getString(6));
-            }
-        }
-    }
-
-    private void displayWasher(){
-        Cursor cursor = dbHelperWasher.readAllDateByAutoId(auto_id);
-        if(cursor.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
-        }else{
-            while(cursor.moveToNext()){
-                expense_id.add(cursor.getInt(0));
-                layout.add("#BBF1F6");
-                text.add("Автомийка");
-                date.add(cursor.getString(2));
-                price.add(cursor.getString(3));
-            }
-        }
-    }
-
-    private void displayOther(){
-        Cursor cursor = dbHelperOther.readAllDateByAutoId(auto_id);
-        if(cursor.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
-        }else{
-            while(cursor.moveToNext()){
-                expense_id.add(cursor.getInt(0));
-                layout.add("#FDFDD4");
-                text.add("Інше");
-                date.add(cursor.getString(2));
+                layout.add(cursor.getString(1));
+                text.add(cursor.getString(2));
+                date.add(cursor.getString(3));
                 price.add(cursor.getString(4));
             }
         }
+    }
+
+    private void displayRepair(){
+        Cursor cursor = dbHelper.readCertainDataByAutoId(auto_id, "repair");
+        fillData(cursor);
+    }
+
+    private void displayRefill(){
+        Cursor cursor = dbHelper.readCertainDataByAutoId(auto_id, "refill");
+        fillData(cursor);
+    }
+
+    private void displayWasher(){
+        Cursor cursor = dbHelper.readCertainDataByAutoId(auto_id, "washer");
+        fillData(cursor);
+    }
+
+    private void displayOther(){
+        Cursor cursor = dbHelper.readCertainDataByAutoId(auto_id, "other");
+        fillData(cursor);
     }
 
 }

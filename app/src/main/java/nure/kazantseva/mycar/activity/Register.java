@@ -9,14 +9,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DbHelperUser;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class Register extends AppCompatActivity {
 
     EditText name, email, password;
-    DbHelperUser dbHelperUser;
+    DBHelper dbHelper;
     InputValidator inputValidator;
 
     @Override
@@ -32,7 +32,7 @@ public class Register extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
-        dbHelperUser = new DbHelperUser(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
         inputValidator = new InputValidator(this.getApplicationContext());
     }
     public void onClickCreateAccount(View view) {
@@ -52,19 +52,26 @@ public class Register extends AppCompatActivity {
         if(!inputValidator.isInputEditTextEmail(email)){
             return;
         }
-        if(!dbHelperUser.checkUser(email.getText().toString().trim())){
+        if(!dbHelper.checkUser(email.getText().toString().trim())){
             User user = new User();
             user.setName(name.getText().toString());
             user.setEmail(email.getText().toString());
             user.setPassword(password.getText().toString());
 
-            dbHelperUser.addUser(user);
+            dbHelper.addUser(user);
             Toast.makeText(this.getApplicationContext(),"New account created!",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, LogIn.class);
-            this.finish();
             startActivity(intent);
+            this.finish();
         }else{
-            Toast.makeText(this.getApplicationContext(),"User with such email is already exist!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getApplicationContext(),"User with such email is already exist!"
+                    ,Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void back(View view) {
+        Intent intent = new Intent(this, LogIn.class);
+        startActivity(intent);
+        this.finish();
     }
 }

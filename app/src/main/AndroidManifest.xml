@@ -42,28 +42,28 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.AddOther"
+            android:name=".activity.addForms.AddOther"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.AddWasher"
+            android:name=".activity.addForms.AddWasher"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.AddRepair"
+            android:name=".activity.addForms.AddRepair"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activity.AddRefill"
+            android:name=".activity.addForms.AddRefill"
             android:exported="false"
             android:parentActivityName=".activity.ListOfExpenses">
             <meta-data

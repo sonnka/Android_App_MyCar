@@ -1,4 +1,4 @@
-package nure.kazantseva.mycar.activity;
+package nure.kazantseva.mycar.activity.addForms;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,8 +16,9 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.db.DBHelperWasher;
-import nure.kazantseva.mycar.model.Repair;
+import nure.kazantseva.mycar.activity.ListOfExpenses;
+import nure.kazantseva.mycar.activity.MainPage;
+import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Washer;
 import nure.kazantseva.mycar.utils.InputValidator;
 
@@ -29,7 +30,7 @@ public class AddWasher extends AppCompatActivity {
     int expense_id = 0;
     DatePickerDialog datePickerDialog;
     InputValidator inputValidator;
-    DBHelperWasher dbHelperWasher;
+    DBHelper dbHelper;
     Washer washer;
 
     @Override
@@ -54,7 +55,7 @@ public class AddWasher extends AppCompatActivity {
             }
         }else{
             Toast.makeText(this.getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(),ListOfExpenses.class);
+            Intent intent = new Intent(this.getApplicationContext(), ListOfExpenses.class);
             this.finish();
             startActivity(intent);
         }
@@ -69,20 +70,20 @@ public class AddWasher extends AppCompatActivity {
 
         washer = new Washer();
         inputValidator = new InputValidator(this.getApplicationContext());
-        dbHelperWasher = new DBHelperWasher(this.getApplicationContext());
+        dbHelper = new DBHelper(this.getApplicationContext());
     }
 
     private void edit(){
         nextButton.setText("Оновити запис");
-        Cursor cursor = dbHelperWasher.findById(expense_id);
+        Cursor cursor = dbHelper.findWasherById(expense_id);
         if(cursor.getCount() == 0){
             Toast.makeText(AddWasher.this,"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
                 washer.setId(cursor.getInt(0));
                 washer.setAuto_id(cursor.getInt(1));
-                washer.setDate(LocalDate.parse(cursor.getString(2)));
-                washer.setPrice(cursor.getDouble(3));
+                washer.setDate(LocalDate.parse(cursor.getString(4)));
+                washer.setPrice(cursor.getDouble(5));
             }
         }
 
@@ -121,9 +122,9 @@ public class AddWasher extends AppCompatActivity {
                 washer.setPrice(Double.parseDouble(price.getText().toString().trim()));
 
                 if (expense_id != 0) {
-                    dbHelperWasher.updateWasher(washer);
+                    dbHelper.updateWasher(washer);
                 } else {
-                    dbHelperWasher.addWasher(washer);
+                    dbHelper.addWasher(washer);
                 }
                 Toast.makeText(this.getApplicationContext(),"New washer created!",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, MainPage.class);
