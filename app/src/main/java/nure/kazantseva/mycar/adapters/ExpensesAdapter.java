@@ -48,7 +48,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.expense_id.setText(String.valueOf(expense_id.get(position)));
-        holder.layout.setBackgroundColor(Color.parseColor(String.valueOf(layout.get(position))));
+        holder.layout.setBackgroundColor(Color.parseColor(layout.get(position)));
         holder.text.setText(String.valueOf(text.get(position)));
         holder.date.setText(String.valueOf(date.get(position)));
         holder.price.setText(String.valueOf(price.get(position)));

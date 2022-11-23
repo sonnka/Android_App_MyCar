@@ -3,7 +3,9 @@ package nure.kazantseva.mycar.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.time.LocalDate;
@@ -158,6 +160,47 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+    public Cursor executeQuery(String query){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            try{
+                cursor = db.rawQuery(query, null);
+            }catch (SQLiteException ignored){
+
+            }
+        }
+        return cursor;
+    }
+
+    public int searchByCode(String code){
+        String[] columns = {
+                COLUMN_AUTO_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = COLUMN_UNIQUE_CODE + " = ?";
+
+        String[] selectionArgs = {code};
+
+        Cursor cursor = db.query(TABLE_AUTO, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+
+        if(cursor.getCount() > 0 && cursor.moveToFirst()){
+            int id = cursor.getInt(0);
+            db.close();
+            return id;
+        }else {
+            db.close();
+            return 0;
+        }
+    }
 
     public Cursor readAllDataByAutoId(int id){
         String query = " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "

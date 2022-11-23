@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AddExistedCar"
+    android:background="@color/color1">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Введіть унікальний код авто"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/color4"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="105dp"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textSize="32sp"/>
+
+    <EditText
+        android:id="@+id/uniqueCode"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginHorizontal="50dp"
+        android:ems="10"
+        android:hint="Unique code"
+        android:fontFamily="@font/alata"
+        android:inputType="number"
+        android:maxLines="1"
+        android:maxLength="6"
+        android:textColor="@color/color4"
+        android:textColorHint="@color/grey"
+        android:textColorHighlight="@color/color2"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/accept"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginHorizontal="110dp"
+        android:gravity="center"
+        android:backgroundTint="@color/color2"
+        android:fontFamily="@font/alata"
+        android:text="Підтвердити"
+        android:textColor="@color/color4"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="onClickNext"
+        android:layout_below="@+id/uniqueCode"/>
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:background="@color/color1"
+        app:srcCompat="@drawable/ic_back"
+        android:onClick="back"/>
+
+
+
+</RelativeLayout>

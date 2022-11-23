@@ -63,14 +63,14 @@ public class LogIn extends AppCompatActivity {
         if(dbHelper.checkByEmail(email) > 0){
             Intent intent = new Intent(this.getApplicationContext(), MainPage.class);
             intent.putExtra("email",email);
-            this.finish();
             startActivity(intent);
+            this.finish();
 
         }else{
             Intent intent = new Intent(this.getApplicationContext(),CreateAuto.class);
             intent.putExtra("email",email);
-            this.finish();
             startActivity(intent);
+            this.finish();
         }
     }
 

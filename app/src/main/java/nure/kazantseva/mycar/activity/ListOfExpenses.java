@@ -103,27 +103,27 @@ public class ListOfExpenses extends Fragment {
 
 
 
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                filterDate(newText);
-//                return false;
-//            }
-//        });
-//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//                clearRecycleView();
-//                displayAllData();
-//                setAdapterOnRecycleView();
-//                return false;
-//            }
-//        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterDate(newText);
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                clearRecycleView();
+                displayAllData();
+                setAdapterOnRecycleView();
+                return false;
+            }
+        });
 
         displayAllData();
         setAdapterOnRecycleView();
@@ -132,12 +132,12 @@ public class ListOfExpenses extends Fragment {
 
     }
 
-//    private void filterDate(String searchText){
-//        Cursor cursor = dbHelper.searchByDate(auto_id, searchText);
-//        clearRecycleView();
-//        fillData(cursor);
-//        setAdapterOnRecycleView();
-//    }
+    private void filterDate(String searchText){
+        Cursor cursor = dbHelper.searchByDate(auto_id, searchText);
+        clearRecycleView();
+        fillData(cursor);
+        setAdapterOnRecycleView();
+    }
 
     private void selectingTabs() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

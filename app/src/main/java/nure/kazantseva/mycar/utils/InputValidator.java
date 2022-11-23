@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.spec.ECField;
 import java.time.LocalDate;
 
 
@@ -80,6 +81,15 @@ public class InputValidator {
         }
         String result = array[2] + "/" + array[1] + "/" + array[0];
         return result;
+    }
+
+    public boolean checkInputCode(String input){
+        try{
+            int code = Integer.parseInt(input.trim());
+            return code >= 100000 && code < 999999;
+        }catch (Exception e){
+            return false;
+        }
     }
 
 }

@@ -126,4 +126,11 @@ public class CreateAuto extends AppCompatActivity {
         }
         return uniqueCode;
     }
+
+    public void hasAlreadyCar(View view) {
+        Intent intent = new Intent(this, AddExistedCar.class);
+        intent.putExtra("email",email);
+        startActivity(intent);
+        this.finish();
+    }
 }
