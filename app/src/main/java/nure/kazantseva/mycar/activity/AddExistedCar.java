@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelper;
+import nure.kazantseva.mycar.model.UserAuto;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class AddExistedCar extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class AddExistedCar extends AppCompatActivity {
     private void readExtra(){
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
-            email = arguments.getString("email").toString();
+            email = arguments.getString("email");
         }else{
             Toast.makeText(this,"Error",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this.getApplicationContext(), LogIn.class);
@@ -53,6 +54,8 @@ public class AddExistedCar extends AppCompatActivity {
             int autoId = dbHelper.searchByCode(input.trim());
             if(autoId != 0){
                 Intent intent = new Intent(this, MainPage.class);
+                UserAuto userAuto = new UserAuto(email,autoId);
+                dbHelper.addUserAuto(userAuto);
                 intent.putExtra("id",autoId);
                 startActivity(intent);
                 this.finish();

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -68,7 +69,7 @@ public class MainPage extends AppCompatActivity
         if(arguments != null){
             if(arguments.containsKey("email")) {
                 String email = arguments.getString("email");
-                setAuto_id(dbHelper.findByEmail(email));
+                setAuto_id(dbHelper.findByEmail(email.trim()));
             }
             if(arguments.containsKey("id")){
                 setAuto_id(arguments.getInt("id"));

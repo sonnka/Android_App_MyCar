@@ -16,6 +16,7 @@ import java.util.Random;
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Auto;
+import nure.kazantseva.mycar.model.UserAuto;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class CreateAuto extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class CreateAuto extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
-            email = arguments.getString("email").toString();
+            email = arguments.getString("email");
         }else{
             Toast.makeText(activity,"Error",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this.getApplicationContext(), LogIn.class);
@@ -101,7 +102,6 @@ public class CreateAuto extends AppCompatActivity {
             return;
         }
         Auto auto = new Auto();
-        auto.setUserEmail(email);
         auto.setUniqueCode(generateUniqueCode());
         auto.setBrand(brand.getText().toString().trim());
         auto.setModel(model.getText().toString().trim());
@@ -110,7 +110,14 @@ public class CreateAuto extends AppCompatActivity {
         auto.setRun(Long.parseLong(run.getText().toString()));
 
         dbHelper.addAuto(auto);
+
+        auto.setId(dbHelper.searchByCode(auto.getUniqueCode()));
+
+        UserAuto userAuto = new UserAuto(email, auto.getId());
+        dbHelper.addUserAuto(userAuto);
+
         Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
+
         Intent intent = new Intent(this, MainPage.class);
         intent.putExtra("id",auto.getId());
         startActivity(intent);

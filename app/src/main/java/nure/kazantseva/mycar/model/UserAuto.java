@@ -2,6 +2,7 @@ package nure.kazantseva.mycar.model;
 
 public class UserAuto {
 
+    private int id;
     private String userEmail;
     private int autoId;
 
@@ -11,6 +12,10 @@ public class UserAuto {
     public UserAuto(String userEmail, int autoId) {
         this.userEmail = userEmail;
         this.autoId = autoId;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUserEmail() {
