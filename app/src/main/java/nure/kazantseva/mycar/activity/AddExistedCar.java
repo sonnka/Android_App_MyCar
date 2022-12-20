@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
@@ -19,11 +21,15 @@ public class AddExistedCar extends AppCompatActivity {
     private EditText code;
     private InputValidator inputValidator;
     private DBHelper dbHelper;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_existed_car);
+
+        back = findViewById(R.id.back);
+        back.setVisibility(View.VISIBLE);
 
         readExtra();
         init();
@@ -33,6 +39,9 @@ public class AddExistedCar extends AppCompatActivity {
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
             email = arguments.getString("email");
+            if(arguments.containsKey("back")){
+                back.setVisibility(View.INVISIBLE);
+            }
         }else{
             Toast.makeText(this,"Error",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this.getApplicationContext(), LogIn.class);
@@ -57,6 +66,7 @@ public class AddExistedCar extends AppCompatActivity {
                 UserAuto userAuto = new UserAuto(email,autoId);
                 dbHelper.addUserAuto(userAuto);
                 intent.putExtra("id",autoId);
+                intent.putExtra("email",email);
                 startActivity(intent);
                 this.finish();
             }else{

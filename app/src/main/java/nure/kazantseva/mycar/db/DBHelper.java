@@ -38,6 +38,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_EMAIL = "email";
+    private static final String COLUMN_IMAGE = "image";
 
     private static final String COLUMN_AUTO_ID = "auto_id";
     private static final String COLUMN_UNIQUE_CODE = "unique_code";
@@ -60,6 +61,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context) {
         super(context, DATABASE_NAME
                 , null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db){
+        super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys=ON");
     }
 
     @Override
@@ -88,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " FOREIGN KEY ("+ COLUMN_EMAIL + ")  REFERENCES user (email) "
                 + "ON DELETE CASCADE ON UPDATE CASCADE ,"
                 + " FOREIGN KEY ("+ COLUMN_AUTO_ID + ")  REFERENCES auto (auto_id) "
-                + "ON DELETE CASCADE ON UPDATE CASCADE "
+                + "ON DELETE CASCADE "
                 + ")";
 
         String CREATE_REPAIR_TABLE = "CREATE TABLE " + TABLE_REPAIR + "("
@@ -101,7 +108,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_DESCRIPTION + " TEXT,"
                 + COLUMN_PRICE + " REAL,"
                 + " FOREIGN KEY ("+ COLUMN_AUTO_ID + ")  REFERENCES auto (auto_id) "
-                + "ON DELETE CASCADE ON UPDATE CASCADE"
+                + "ON DELETE CASCADE "
                 + ")";
 
         String CREATE_REFILL_TABLE = "CREATE TABLE " + TABLE_REFILL + "("
@@ -116,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_PRICE + " REAL,"
                 + COLUMN_STATION + " TEXT,"
                 + " FOREIGN KEY ("+ COLUMN_AUTO_ID + ")  REFERENCES auto (auto_id) "
-                + "ON DELETE CASCADE ON UPDATE CASCADE "
+                + "ON DELETE CASCADE "
                 + ")";
 
         String CREATE_WASHER_TABLE = "CREATE TABLE " + TABLE_WASHER + "("
@@ -127,7 +134,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE + " TEXT,"
                 + COLUMN_PRICE + " REAL,"
                 + " FOREIGN KEY ("+ COLUMN_AUTO_ID + ")  REFERENCES auto (auto_id) "
-                + "ON DELETE CASCADE ON UPDATE CASCADE "
+                + "ON DELETE CASCADE "
                 + ")";
 
         String CREATE_OTHER_TABLE = "CREATE TABLE " + TABLE_OTHER + "("
@@ -139,7 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_DESCRIPTION + " TEXT,"
                 + COLUMN_PRICE + " REAL,"
                 + " FOREIGN KEY ("+ COLUMN_AUTO_ID + ")  REFERENCES auto (auto_id) "
-                + "ON DELETE CASCADE ON UPDATE CASCADE "
+                + "ON DELETE CASCADE "
                 + ")";
 
         db.execSQL(CREATE_USER_TABLE);
@@ -285,6 +292,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+
     public void addAuto(Auto auto){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -379,6 +387,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
     public void deleteAuto(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String DELETE_AUTO = "DELETE FROM " + TABLE_AUTO + " WHERE "
@@ -386,7 +395,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DELETE_AUTO);
         db.close();
     }
-
 
     public void deleteUser(String email){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -436,12 +444,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateUser(User user){
+
+    public void updateUser(User user, String email){
         SQLiteDatabase db = this.getWritableDatabase();
         String UPDATE_USER = "UPDATE " + TABLE_USER + " SET "
                 + COLUMN_NAME + " = '" + user.getName() + "', "
                 + COLUMN_PASSWORD + " = '" + user.getPassword() + "', "
-                + " WHERE(" + COLUMN_EMAIL + "=" + user.getEmail() + ")";
+                + COLUMN_EMAIL + " = '" + user.getEmail() + "'"
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "')";
         db.execSQL(UPDATE_USER);
         db.close();
     }
@@ -451,8 +461,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String UPDATE_AUTO = "UPDATE " + TABLE_AUTO + " SET "
                 + COLUMN_MODEL + " = '" + auto.getModel() + "',"
                 + COLUMN_BRAND + " = '" + auto.getBrand() + "',"
-                + COLUMN_YEAR + " = '" + auto.getYear() + "', "
-                + COLUMN_RUN + " = '" + auto.getRun() + "'"
+                + COLUMN_YEAR + " = " + auto.getYear() + ", "
+                + COLUMN_RUN + " = " + auto.getRun()
                 + " WHERE(" + COLUMN_AUTO_ID + "=" + auto.getId() + ")";
         db.execSQL(UPDATE_AUTO);
         db.close();
@@ -505,6 +515,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
     public Cursor findRepairById(int id){
         String query = "SELECT * FROM " + TABLE_REPAIR + " WHERE("
                 + COLUMN_ID + "=" + id +")";
@@ -548,6 +559,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
 
     public boolean checkUser(String email) {
         String query = "SELECT * FROM " + TABLE_USER + " WHERE("
@@ -613,7 +625,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursorCount > 0;
     }
 
-
     public int checkByEmail(String email){
         String[] columns = {
                 COLUMN_USER_AUTO_ID
@@ -637,6 +648,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursorCount;
     }
 
+
     public int findByEmail(String email){
         String query = "SELECT * FROM " + TABLE_USER_AUTO + " WHERE("
                 + COLUMN_EMAIL + "='" + email +"')";
@@ -657,6 +669,141 @@ public class DBHelper extends SQLiteOpenHelper {
             return -1;
         }
 
+    }
+
+    public Cursor findUserByEmail(String email){
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE("
+                + COLUMN_EMAIL + "='" + email +"')";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor findAutoById(int auto_id){
+        String query = "SELECT * FROM " + TABLE_AUTO + " WHERE("
+                + COLUMN_AUTO_ID + "=" + auto_id +")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor findMaxRun(int auto_id){
+        String query = "SELECT MAX(" + COLUMN_RUN + ") AS max FROM ("
+                + "SELECT MAX(" + COLUMN_RUN+ ") AS run FROM "  + TABLE_AUTO
+                + " WHERE(" + COLUMN_AUTO_ID + "='" + auto_id +"')"
+                + "UNION "
+                + "SELECT MAX(" + COLUMN_RUN+ ") AS run FROM "  + TABLE_REPAIR
+                + " WHERE(" + COLUMN_AUTO_ID + "='" + auto_id +"')"
+                + "UNION "
+                + "SELECT MAX(" + COLUMN_RUN+ ") AS run FROM "  + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "='" + auto_id +"')"
+                + ") AS TEMP" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor getFuelConsumption(int auto_id){
+        String query = "SELECT " + COLUMN_RUN + ", "
+                + COLUMN_BEFORE_REFILL + ", " + COLUMN_ADD_FUEL
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + " )"
+                + " ORDER BY " + COLUMN_RUN + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public int countAutos(String email){
+        String query = "SELECT * FROM " + TABLE_USER_AUTO
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "')";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor.getCount();
+    }
+
+    public Cursor getAutosOfUser(String email){
+        String query = "SELECT " + COLUMN_AUTO_ID + ", " + COLUMN_BRAND + ", " + COLUMN_MODEL
+                + " FROM " + TABLE_AUTO
+                + " WHERE(" + COLUMN_AUTO_ID + " IN ("
+                + "SELECT " + COLUMN_AUTO_ID + " FROM " + TABLE_USER_AUTO
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "'))"
+                + ")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+
+    public void addImageColumnUser(){
+        String query = "ALTER TABLE " + TABLE_USER + " ADD COLUMN " + COLUMN_IMAGE + " text";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
+        db.close();
+    }
+
+    public void addImageColumnAuto(){
+        String query = "ALTER TABLE " + TABLE_AUTO + " ADD COLUMN " + COLUMN_IMAGE + " text";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
+        db.close();
+    }
+
+
+    public void insertImageUser(String image, String email){
+        String query = "UPDATE " + TABLE_USER + " SET " + COLUMN_IMAGE
+                + "='" + image + "'" + " WHERE(" + COLUMN_EMAIL + "='" + email + "')";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
+        db.close();
+    }
+
+    public void insertImageAuto(String image, int auto_id){
+        String query = "UPDATE " + TABLE_AUTO + " SET " + COLUMN_IMAGE
+                + "='" + image + "'" + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
+        db.close();
+    }
+
+    public Cursor getImageUser(String email){
+        String query = "SELECT " + COLUMN_IMAGE + " FROM " + TABLE_USER
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "')";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor getImageAuto(int auto_id){
+        String query = "SELECT " + COLUMN_IMAGE + " FROM " + TABLE_AUTO
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
     }
 
 

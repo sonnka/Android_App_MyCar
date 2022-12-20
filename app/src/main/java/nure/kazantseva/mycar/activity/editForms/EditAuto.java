@@ -1,8 +1,9 @@
-package nure.kazantseva.mycar.activity;
+package nure.kazantseva.mycar.activity.editForms;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,18 +15,23 @@ import android.widget.Toast;
 import java.util.Random;
 
 import nure.kazantseva.mycar.R;
+import nure.kazantseva.mycar.activity.AddExistedCar;
+import nure.kazantseva.mycar.activity.CreateAuto;
+import nure.kazantseva.mycar.activity.MainPage;
 import nure.kazantseva.mycar.db.DBHelper;
 import nure.kazantseva.mycar.model.Auto;
 import nure.kazantseva.mycar.model.UserAuto;
 import nure.kazantseva.mycar.utils.InputValidator;
 
-public class CreateAuto extends AppCompatActivity {
-    private final AppCompatActivity activity = CreateAuto.this;
+public class EditAuto extends AppCompatActivity {
+
+    private final AppCompatActivity activity = EditAuto.this;
 
     private EditText brand, model, year, fuel, run;
     private InputValidator inputValidator;
     private DBHelper dbHelper;
     private String email;
+    int auto_id;
     private Spinner spinner;
 
     private String[] type_of_fuel = new String[]{"Газ","Бензин","Дизель"};
@@ -33,17 +39,7 @@ public class CreateAuto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_auto);
-
-        Bundle arguments = getIntent().getExtras();
-        if(arguments != null){
-            email = arguments.getString("email");
-        }else{
-            Toast.makeText(activity,"Error",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getApplicationContext(), LogIn.class);
-            this.finish();
-            startActivity(intent);
-        }
+        setContentView(R.layout.activity_edit_auto);
         init();
     }
 
@@ -54,14 +50,17 @@ public class CreateAuto extends AppCompatActivity {
         run = findViewById(R.id.runInput);
         fuel = new EditText(activity);
 
+        email = MainPage.getEmail();
+        auto_id = MainPage.getAuto_id();
+
         inputValidator = new InputValidator(activity);
         dbHelper = new DBHelper(activity);
         spinner = findViewById(R.id.spinner);
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this
-                , R.layout.layout_spinner_item, type_of_fuel);
+                , R.layout.layout_spinner2_item, type_of_fuel);
 
-        adapter.setDropDownViewResource(R.layout.layout_spinner_item);
+        adapter.setDropDownViewResource(R.layout.layout_spinner2_item);
 
         spinner.setAdapter(adapter);
 
@@ -79,6 +78,39 @@ public class CreateAuto extends AppCompatActivity {
             }
         };
         spinner.setOnItemSelectedListener(itemSelectedListener);
+
+        fillData();
+    }
+
+    public void fillData(){
+        Auto auto = autoData();
+        brand.setText(auto.getBrand());
+        model.setText(auto.getModel());
+        year.setText(String.valueOf(auto.getYear()));
+        run.setText(String.valueOf(auto.getRun()));
+        switch (auto.getFuel()){
+            case "Газ": spinner.setSelection(0); break;
+            case "Бензин": spinner.setSelection(1); break;
+            case "Дизель": spinner.setSelection(2); break;
+        }
+
+    }
+
+    private Auto autoData(){
+        Cursor cursor = dbHelper.findAutoById(auto_id);
+        Auto auto = new Auto();
+        if(cursor.getCount() == 0){
+        }else{
+            while(cursor.moveToNext()){
+                auto.setUniqueCode(cursor.getString(1));
+                auto.setBrand(cursor.getString(2));
+                auto.setModel(cursor.getString(3));
+                auto.setYear(cursor.getInt(4));
+                auto.setFuel(cursor.getString(5));
+                auto.setRun(cursor.getLong(6));
+            }
+        }
+        return auto;
     }
 
     public void onClickNext(View view) {
@@ -102,21 +134,16 @@ public class CreateAuto extends AppCompatActivity {
             return;
         }
         Auto auto = new Auto();
-        auto.setUniqueCode(generateUniqueCode());
+        auto.setId(auto_id);
         auto.setBrand(brand.getText().toString().trim());
         auto.setModel(model.getText().toString().trim());
         auto.setYear(Integer.parseInt(year.getText().toString()));
         auto.setFuel(fuel.getText().toString().trim());
         auto.setRun(Long.parseLong(run.getText().toString()));
 
-        dbHelper.addAuto(auto);
+        dbHelper.updateAuto(auto);
 
-        auto.setId(dbHelper.searchByCode(auto.getUniqueCode()));
-
-        UserAuto userAuto = new UserAuto(email, auto.getId());
-        dbHelper.addUserAuto(userAuto);
-
-        Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getApplicationContext(),"Auto is updated!",Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(this, MainPage.class);
         intent.putExtra("id",auto.getId());
@@ -125,20 +152,12 @@ public class CreateAuto extends AppCompatActivity {
         this.finish();
     }
 
-    private String generateUniqueCode() {
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
-        String uniqueCode = String.format("%06d", number);
-        if(dbHelper.checkUniqueCode(uniqueCode)){
-            generateUniqueCode();
-        }
-        return uniqueCode;
-    }
-
-    public void hasAlreadyCar(View view) {
-        Intent intent = new Intent(this, AddExistedCar.class);
+    public void back(View view) {
+        Intent intent = new Intent(this, MainPage.class);
         intent.putExtra("email",email);
+        intent.putExtra("id",auto_id);
         startActivity(intent);
         this.finish();
     }
+
 }

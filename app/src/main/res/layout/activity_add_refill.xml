@@ -18,16 +18,15 @@
     <TextView
         android:id="@+id/refill_text"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:text="Заправка авто"
         android:fontFamily="@font/alata"
         android:textColor="@color/color4"
         android:layout_marginHorizontal="20dp"
         android:layout_below="@id/back"
-        android:layout_marginTop="5dp"
         android:gravity="center"
         android:textStyle="italic"
-        android:textSize="32sp"/>
+        android:textSize="30sp"/>
     <LinearLayout
         android:id="@+id/line1"
         android:layout_width="match_parent"
@@ -108,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/line2"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -145,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/line3"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <TextView
@@ -254,7 +253,7 @@
         android:layout_height="70dp"
         android:layout_below="@id/line6"
         android:layout_marginLeft="230dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/color2"
         android:fontFamily="@font/alata"
         android:text="Додати запис"

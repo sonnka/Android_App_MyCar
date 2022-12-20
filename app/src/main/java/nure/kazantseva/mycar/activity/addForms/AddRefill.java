@@ -1,6 +1,7 @@
 package nure.kazantseva.mycar.activity.addForms;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -158,9 +159,13 @@ public class AddRefill extends AppCompatActivity {
                     dbHelper.addRefill(refill);
                 }
                 Toast.makeText(this.getApplicationContext(),"New refill created!",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, MainPage.class);
-                intent.putExtra("id",auto_id);
-                startActivity(intent);
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() == 1) {
+                    //no fragments left
+                    finish();
+                } else {
+                    super.onBackPressed();
+                }
                 this.finish();
             }else{
                 Toast.makeText(this.getApplicationContext(),"Not convert date!",Toast.LENGTH_LONG).show();
@@ -172,9 +177,12 @@ public class AddRefill extends AppCompatActivity {
     }
 
     public void back(View view) {
-        Intent intent = new Intent(this, MainPage.class);
-        intent.putExtra("id",auto_id);
-        startActivity(intent);
-        this.finish();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() == 1) {
+            //no fragments left
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

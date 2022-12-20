@@ -1,9 +1,12 @@
 package nure.kazantseva.mycar.activity.addForms;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -134,9 +137,12 @@ public class AddOther extends AppCompatActivity {
                     dbHelper.addOther(other);
                 }
                 Toast.makeText(this.getApplicationContext(),"New other created!",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, MainPage.class);
-                intent.putExtra("id",auto_id);
-                startActivity(intent);
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() == 1) {
+                    finish();
+                } else {
+                    super.onBackPressed();
+                }
                 this.finish();
             }else{
                 Toast.makeText(this.getApplicationContext(),"Not convert date!",Toast.LENGTH_LONG).show();
@@ -148,9 +154,11 @@ public class AddOther extends AppCompatActivity {
     }
 
     public void back(View view) {
-        Intent intent = new Intent(this, MainPage.class);
-        intent.putExtra("id",auto_id);
-        startActivity(intent);
-        this.finish();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() == 1) {
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

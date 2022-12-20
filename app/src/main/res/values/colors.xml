@@ -9,11 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color1">#0D1E2B</color>
     <color name="color2">#30BDCC</color>
-    <color name="color3">#A4EBF3</color>
+    <color name="color3">#B3F1F8</color>
     <color name="color4">#F4F9F9</color>
     <color name="grey">#878787</color>
     <color name="repair">#F5D4F8</color>
     <color name="refill">#D5F6D3</color>
     <color name="washer">#BBF1F6</color>
     <color name="other">#FDFDD4</color>
+    <color name="red">#950514</color>
 </resources>

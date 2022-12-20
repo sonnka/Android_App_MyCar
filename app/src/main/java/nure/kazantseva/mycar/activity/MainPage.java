@@ -2,6 +2,9 @@ package nure.kazantseva.mycar.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ public class MainPage extends AppCompatActivity
     BottomNavigationView bottomNavigationView;
     DBHelper dbHelper;
     private static int auto_id;
+    private static String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,8 @@ public class MainPage extends AppCompatActivity
         bottomNavigationView = findViewById(R.id.bottomMenu);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.expenses);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setItemIconTintList(null );
     }
 
     public static int getAuto_id() {
@@ -38,6 +43,14 @@ public class MainPage extends AppCompatActivity
 
     public static void setAuto_id(int autoIdNew) {
         auto_id = autoIdNew;
+    }
+
+    public static String getEmail() {
+        return email;
+    }
+
+    public static void setEmail(String email) {
+        email = email;
     }
 
     @Override
@@ -68,7 +81,7 @@ public class MainPage extends AppCompatActivity
         Bundle arguments = getIntent().getExtras();
         if(arguments != null){
             if(arguments.containsKey("email")) {
-                String email = arguments.getString("email");
+                email = arguments.getString("email");
                 setAuto_id(dbHelper.findByEmail(email.trim()));
             }
             if(arguments.containsKey("id")){
@@ -80,4 +93,5 @@ public class MainPage extends AppCompatActivity
             startActivity(intent);
         }
     }
+
 }

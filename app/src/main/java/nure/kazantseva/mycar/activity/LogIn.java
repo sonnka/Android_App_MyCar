@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.db.DBHelper;
+import nure.kazantseva.mycar.model.User;
 import nure.kazantseva.mycar.utils.InputValidator;
 
 public class LogIn extends AppCompatActivity {
@@ -33,7 +34,6 @@ public class LogIn extends AppCompatActivity {
 
         inputValidator = new InputValidator(activity);
         dbHelper = new DBHelper(activity);
-
     }
 
     public void onClickLogIn(View view) {
