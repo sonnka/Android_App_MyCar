@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.statistics.Statistic3">
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:background="@color/color1"
+            app:srcCompat="@drawable/ic_back"
+            android:onClick="back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Розрахунок вартості поїздки"
+            android:fontFamily="@font/alata"
+            android:textSize="24sp"
+            android:textColor="@color/color2"
+            android:textStyle="bold"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/line2"
+        android:layout_below="@id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/destText"
+            android:layout_width="140dp"
+            android:layout_height="130dp"
+            android:fontFamily="@font/alata"
+            android:text="Введіть відстань (км), на яку хочете
+            разрахувати витрати :"
+            android:textColor="@color/color2"
+            android:textColorHighlight="@color/color2"
+            android:textColorHint="@color/color1"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/destination"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:fontFamily="@font/alata"
+            android:maxLines="1"
+            android:textColor="@color/color1"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="20sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/line3"
+        android:layout_below="@id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/cosumText"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:fontFamily="@font/alata"
+            android:textColor="@color/color2"
+            android:textStyle="bold"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="15sp"
+            android:text="Ваш поточний розхід палива :" />
+
+        <TextView
+            android:id="@+id/fuelConsum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/alata"
+            android:maxLines="1"
+            android:textColor="@color/color1"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="20sp"
+            android:text="- л/км " />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/line4"
+        android:layout_below="@id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/priceLiterText"
+            android:layout_width="140dp"
+            android:layout_height="125dp"
+            android:fontFamily="@font/alata"
+            android:textColor="@color/color2"
+            android:textStyle="bold"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="15sp"
+            android:text="Ціна за 1 л палива (розраховується
+            з даних про вашу останню заправку)" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/alata"
+            android:maxLines="1"
+            android:textColor="@color/color1"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="20sp"
+            android:text="- грн " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/line5"
+        android:layout_below="@id/line4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
+            android:maxLines="1"
+            android:textColor="@color/color2"
+            android:textStyle="bold"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="20sp"
+            android:text="Вартість поїздки : " />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/alata"
+            android:maxLines="1"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:textColorHint="@color/color1"
+            android:textColorHighlight="@color/color2"
+            android:textSize="22sp"
+            android:text="- грн " />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_below="@id/line5"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="190dp"
+        app:srcCompat="@drawable/map" />
+
+    <Button
+        android:id="@+id/calculate"
+        android:layout_below="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="110dp"
+        android:fontFamily="@font/alata"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Розрахувати"
+        android:onClick="calculate"/>
+
+
+</RelativeLayout>

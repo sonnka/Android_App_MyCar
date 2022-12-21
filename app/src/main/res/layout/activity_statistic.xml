@@ -7,5 +7,103 @@
     tools:context=".activity.Statistic">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:fontFamily="@font/alata"
+            android:textColor="@color/color2"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:text="Статистики" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button1"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/alata"
+            android:textSize="17sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button1"
+            android:text="Топ витрат по авто" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button2"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/alata"
+            android:textSize="17sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button2"
+            android:text="Статистика витрат на паливо" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button3"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/alata"
+            android:textSize="17sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button3"
+            android:text="Розрахунок вартості поїздки" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button4"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/alata"
+            android:textSize="17sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button4"
+            android:text="Порівняння автомобілів" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:fontFamily="@font/alata"
+            android:textColor="@color/color2"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:text="Для розробника" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button5"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/alata"
+            android:textSize="17sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button1"
+            android:text="Конструктор запитів" />
+    </LinearLayout>
 </FrameLayout>

@@ -807,4 +807,132 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getStatistic1(int auto_id){
+        String query = "SELECT 'Ремонт', " + "SUM("  + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_REPAIR
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")"
+                + " UNION "
+                + "SELECT 'Заправка', " + "SUM("  + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")"
+                + " UNION "
+                + "SELECT 'Автомийка', " + "SUM("  + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_WASHER
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")"
+                + " UNION "
+                + "SELECT 'Інше', " + "SUM("  + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_OTHER
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor getStatistic2(int auto_id, String year){
+        String query = "SELECT month ,name , value FROM ("
+                + "SELECT 1 as month ,'Січ' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-01-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 2 as month , 'Лют' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-02-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 3 as month , 'Бер' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-03-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 4 as month , 'Кві' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-04-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 5 as month , 'Тра'as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-05-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 6 as month , 'Чер' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-06-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 7 as month , 'Лип' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-07-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 8 as month , 'Сер' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-08-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 9 as month , 'Вер' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-09-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 10 as month , 'Жов' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-10-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 11 as month , 'Лис' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-11-" + "%'" + ")"
+                + " UNION "
+                + "SELECT 12 as month , 'Гру' as name, " + "COALESCE(SUM("  + COLUMN_PRICE + "),0) as value"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + COLUMN_DATE + " LIKE '" + year + "-12-" + "%'" + ")"
+                + ") ORDER BY month";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor getStatistic3(int auto_id){
+        String query = "SELECT " + COLUMN_PRICE + "/" + COLUMN_ADD_FUEL
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + "='" + auto_id + "')"
+                + " ORDER BY " + COLUMN_RUN;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor getStatistics4(String email){
+        String query = "SELECT 'Ремонт' as name, " + COLUMN_AUTO_ID + ", " + " Sum(" + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_REPAIR
+                + " WHERE(" + COLUMN_AUTO_ID + " IN "
+                + "( SELECT " + COLUMN_AUTO_ID + " FROM " + TABLE_USER_AUTO
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "')"
+                + ")) GROUP BY " + COLUMN_AUTO_ID + ", name"
+                + " UNION "
+                + "SELECT 'Заправка' as name, " + COLUMN_AUTO_ID + ", " + " Sum(" + COLUMN_PRICE + ")"
+                + " FROM " + TABLE_REFILL
+                + " WHERE(" + COLUMN_AUTO_ID + " IN "
+                + "( SELECT " + COLUMN_AUTO_ID + " FROM " + TABLE_USER_AUTO
+                + " WHERE(" + COLUMN_EMAIL + "='" + email + "')"
+                + ")) GROUP BY " + COLUMN_AUTO_ID + ", name";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
 }

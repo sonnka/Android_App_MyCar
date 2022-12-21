@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color3"
+    tools:context=".activity.statistics.Statistic4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/color1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:background="@color/color1"
+            app:srcCompat="@drawable/ic_back"
+            android:onClick="back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Порівняння витрат на автомобілі"
+            android:fontFamily="@font/alata"
+            android:textSize="24sp"
+            android:textColor="@color/color2"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart1"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"/>
+
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart2"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"/>
+
+</LinearLayout>

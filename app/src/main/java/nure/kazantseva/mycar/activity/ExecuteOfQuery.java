@@ -1,10 +1,12 @@
 package nure.kazantseva.mycar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +28,8 @@ public class ExecuteOfQuery extends AppCompatActivity {
     DBHelper dbHelper;
     ArrayList<String> text;
     QueryAdapter queryAdapter;
+    int auto_id;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class ExecuteOfQuery extends AppCompatActivity {
         text = new ArrayList<>();
 
         dbHelper = new DBHelper(this);
+        auto_id = MainPage.getAuto_id();
+        email = MainPage.getEmail();
 
         recyclerView = findViewById(R.id.recycle_view);
         query = findViewById(R.id.query);
@@ -82,5 +88,15 @@ public class ExecuteOfQuery extends AppCompatActivity {
         queryAdapter = new QueryAdapter(this,text);
         recyclerView.setAdapter(queryAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void back(View view){
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() == 1) {
+            //no fragments left
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
