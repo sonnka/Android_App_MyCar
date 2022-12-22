@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import nure.kazantseva.mycar.db.DBHelper;
 public class ListOfExpenses extends Fragment {
 
     FloatingActionButton fab, fab1, fab2, fab3, fab4;
+    ImageButton sortDate, sortPrice;
     TabLayout tabLayout;
     SearchView searchView;
     RecyclerView recyclerView;
@@ -39,6 +41,8 @@ public class ListOfExpenses extends Fragment {
     ExpensesAdapter expensesAdapter;
     ArrayList<String> date, price, text, layout;
     ArrayList<Integer> expense_id;
+    Boolean isDate = false;
+    Boolean isPrice = false;
 
 
     public ListOfExpenses(){
@@ -65,6 +69,8 @@ public class ListOfExpenses extends Fragment {
         recyclerView = v.findViewById(R.id.recycle_view);
         tabLayout = v.findViewById(R.id.tabs);
         searchView = v.findViewById(R.id.search);
+        sortDate = v.findViewById(R.id.sortDate);
+        sortPrice = v.findViewById(R.id.sortPrice);
 
         fab = v.findViewById(R.id.add_button);
         fab1 = v.findViewById(R.id.other_button);
@@ -125,6 +131,44 @@ public class ListOfExpenses extends Fragment {
             }
         });
 
+        sortDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isDate){
+                    Cursor cursor = dbHelper.descByDate(auto_id);
+                    clearRecycleView();
+                    fillData(cursor);
+                    setAdapterOnRecycleView();
+                    isDate = false;
+                }else{
+                    Cursor cursor = dbHelper.orderByDate(auto_id);
+                    clearRecycleView();
+                    fillData(cursor);
+                    setAdapterOnRecycleView();
+                    isDate = true;
+                }
+            }
+        });
+        sortPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPrice){
+                    Cursor cursor = dbHelper.descByPrice(auto_id);
+                    clearRecycleView();
+                    fillData(cursor);
+                    setAdapterOnRecycleView();
+                    isPrice = false;
+                }else{
+                    Cursor cursor = dbHelper.orderByPrice(auto_id);
+                    clearRecycleView();
+                    fillData(cursor);
+                    setAdapterOnRecycleView();
+                    isPrice = true;
+                }
+            }
+        });
+
+
         displayAllData();
         setAdapterOnRecycleView();
 
@@ -134,9 +178,16 @@ public class ListOfExpenses extends Fragment {
 
     private void filterDate(String searchText){
         Cursor cursor = dbHelper.searchByDate(auto_id, searchText);
-        clearRecycleView();
-        fillData(cursor);
-        setAdapterOnRecycleView();
+        if(cursor.getCount() == 0){
+            Cursor cursor2 = dbHelper.searchByDescription(auto_id, searchText);
+            clearRecycleView();
+            fillData(cursor2);
+            setAdapterOnRecycleView();
+        }else{
+            clearRecycleView();
+            fillData(cursor);
+            setAdapterOnRecycleView();
+        }
     }
 
     private void selectingTabs() {

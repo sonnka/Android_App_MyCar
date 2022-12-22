@@ -1,6 +1,11 @@
 package nure.kazantseva.mycar.activity;
 
+
 import static android.app.Activity.RESULT_OK;
+
+
+import static com.itextpdf.text.html.HtmlTags.FONT;
+import static com.itextpdf.text.xml.xmp.XmpWriter.UTF8;
 
 import androidx.fragment.app.Fragment;
 
@@ -9,8 +14,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,22 +23,42 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfEncodings;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.fonts.otf.Language;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import nure.kazantseva.mycar.R;
-import nure.kazantseva.mycar.activity.addForms.AddOther;
-import nure.kazantseva.mycar.activity.addForms.AddRefill;
-import nure.kazantseva.mycar.activity.addForms.AddRepair;
-import nure.kazantseva.mycar.activity.addForms.AddWasher;
 import nure.kazantseva.mycar.activity.editForms.EditAuto;
 import nure.kazantseva.mycar.activity.editForms.EditUser;
 import nure.kazantseva.mycar.db.DBHelper;
@@ -42,10 +67,13 @@ import nure.kazantseva.mycar.model.User;
 
 public class AboutMe extends Fragment {
 
+    public static final String FONT = "/assets/fonts/arial.ttf";
+
     int auto_id;
     String email;
     DBHelper dbHelper;
     ImageButton editUser, editAuto, deleteAuto;
+    Button report1, report2;
     TextView name, emailTV, brandModel, year, run, uniqueCode, fuel_consumption, text, logout;
     Spinner spinner;
     ImageView meImage, autoImage;
@@ -53,6 +81,7 @@ public class AboutMe extends Fragment {
     String  meUri, autoUri;
     int isFirst;
     private static final int PICK_IMAGE = 1;
+
 
     public AboutMe(){
 
@@ -77,6 +106,8 @@ public class AboutMe extends Fragment {
         deleteAuto = v.findViewById(R.id.deleteAuto);
         spinner = v.findViewById(R.id.spinner);
         logout = v.findViewById(R.id.Logout);
+        report1 = v.findViewById(R.id.report1);
+        report2 = v.findViewById(R.id.report2);
 
         meImage = v.findViewById(R.id.meImage);
         autoImage = v.findViewById(R.id.autoImage);
@@ -171,7 +202,6 @@ public class AboutMe extends Fragment {
         Cursor cursor = dbHelper.findUserByEmail(email);
         User user = new User();
         if(cursor.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
                 user.setName(cursor.getString(0));
@@ -186,7 +216,6 @@ public class AboutMe extends Fragment {
         Cursor cursor = dbHelper.findAutoById(auto_id);
         Auto auto = new Auto();
         if(cursor.getCount() == 0){
-            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
         }else{
             while(cursor.moveToNext()){
                 auto.setUniqueCode(cursor.getString(1));
@@ -238,6 +267,25 @@ public class AboutMe extends Fragment {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE);
+        });
+
+        report1.setOnClickListener(v -> {
+            try {
+                createPdf1();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        report2.setOnClickListener(v -> {
+            try {
+                createPdf2();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         if(dbHelper.countAutos(email) > 0){
@@ -337,6 +385,157 @@ public class AboutMe extends Fragment {
                             Intent.FLAG_GRANT_READ_URI_PERMISSION
                     );
         }
+    }
+
+
+    private void createPdf1() throws DocumentException, IOException {
+
+        File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS ), "Report1.pdf");
+        Date date = new Date();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+        File myFile = new File(pdfFolder + timeStamp + ".pdf");
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(myFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        Document document = new Document();
+
+
+        try {
+            PdfWriter.getInstance(document, output);
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        BaseFont bf=BaseFont.createFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font font=new Font(bf,14,Font.NORMAL);
+        document.open();
+
+        String dataOfGenerate = "День формування звіту : " +
+                LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        try {
+            document.add(new Paragraph(dataOfGenerate,font));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph(name.getText().toString(),font));
+            document.add(new Paragraph(brandModel.getText().toString(),font));
+            document.add(new Paragraph(year.getText().toString(),font));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+
+        PdfPTable table = new PdfPTable(4);
+
+        table.addCell(new Paragraph("Дата",font));
+        table.addCell(new Paragraph("Пробіг",font));
+        table.addCell(new Paragraph("Опис ремонту",font));
+        table.addCell(new Paragraph("Кількість витрачених грошей",font));
+
+        Cursor cursor = dbHelper.generateReport1(auto_id);
+
+        if(cursor.getCount() == 0){
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor.moveToNext()){
+                table.addCell(new Paragraph(cursor.getString(0),font));
+                table.addCell(new Paragraph(cursor.getString(1) + " км",font));
+                table.addCell(new Paragraph(cursor.getString(2),font));
+                table.addCell(new Paragraph(cursor.getString(3) + " грн",font));
+            }
+        }
+        try {
+            document.add(table);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        document.close();
+    }
+
+    private void createPdf2() throws DocumentException, IOException {
+
+        File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS ), "Report2.pdf");
+        Date date = new Date();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+        File myFile = new File(pdfFolder + timeStamp + ".pdf");
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(myFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        Document document = new Document();
+
+
+        try {
+            PdfWriter.getInstance(document, output);
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        BaseFont bf=BaseFont.createFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font font=new Font(bf,14,Font.NORMAL);
+        document.open();
+
+        String dataOfGenerate = "День формування звіту : " +
+                LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        try {
+            document.add(new Paragraph(dataOfGenerate,font));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph(name.getText().toString(),font));
+            document.add(new Paragraph(brandModel.getText().toString(),font));
+            document.add(new Paragraph(year.getText().toString(),font));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+
+        PdfPTable table = new PdfPTable(7);
+
+        table.addCell(new Paragraph("Дата",font));
+        table.addCell(new Paragraph("Пробіг",font));
+        table.addCell(new Paragraph("Вид палива",font));
+        table.addCell(new Paragraph("Кількість залитого палива",font));
+        table.addCell(new Paragraph("Ціна за 1 літр",font));
+        table.addCell(new Paragraph("Кількість витрачених грошей",font));
+        table.addCell(new Paragraph("АЗС",font));
+
+        Cursor cursor = dbHelper.generateReport2(auto_id);
+
+        if(cursor.getCount() == 0){
+            Toast.makeText(this.getActivity(),"No data!",Toast.LENGTH_LONG).show();
+        }else{
+            while(cursor.moveToNext()){
+                table.addCell(new Paragraph(cursor.getString(0),font));
+                table.addCell(new Paragraph(cursor.getString(1) + " км",font));
+                table.addCell(new Paragraph(cursor.getString(2),font));
+                table.addCell(new Paragraph(cursor.getString(3) + " л",font));
+                table.addCell(new Paragraph(cursor.getString(4) + " грн",font));
+                table.addCell(new Paragraph(cursor.getString(5) + " грн",font));
+                table.addCell(new Paragraph(cursor.getString(6),font));
+            }
+        }
+        try {
+            document.add(table);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        document.close();
     }
 
 }

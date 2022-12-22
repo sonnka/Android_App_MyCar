@@ -293,6 +293,25 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor searchByDescription(int id, String date){
+        String query = " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM "
+                + TABLE_REPAIR  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " AND " + COLUMN_DESCRIPTION + " LIKE '%" + date + "%'"
+                + " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_OTHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " AND " + COLUMN_DESCRIPTION + " LIKE '%" + date + "%'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+
     public void addAuto(Auto auto){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -928,6 +947,149 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "( SELECT " + COLUMN_AUTO_ID + " FROM " + TABLE_USER_AUTO
                 + " WHERE(" + COLUMN_EMAIL + "='" + email + "')"
                 + ")) GROUP BY " + COLUMN_AUTO_ID + ", name";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor generateReport1(int auto_id){
+        String query = "SELECT " + COLUMN_DATE + ", "+ COLUMN_RUN + ", " + COLUMN_DESCRIPTION
+                + ", " + COLUMN_PRICE
+                + " FROM " + TABLE_REPAIR
+                + " WHERE(" + COLUMN_AUTO_ID + "=" + auto_id + ")"
+                + " ORDER BY " + COLUMN_DATE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor generateReport2(int auto_id){
+        String query = "SELECT " + TABLE_REFILL + "." + COLUMN_DATE + ", "+ TABLE_REFILL + "." + COLUMN_RUN + ", "
+                + TABLE_AUTO + "." + COLUMN_FUEL
+                + ", " + TABLE_REFILL + "." + COLUMN_ADD_FUEL + ", "
+                + TABLE_REFILL + "." +COLUMN_PRICE + "/" + TABLE_REFILL + "." + COLUMN_ADD_FUEL + " AS priceLiter"
+                + ", " + TABLE_REFILL + "." + COLUMN_PRICE + ", " + TABLE_REFILL + "." + COLUMN_STATION
+                + " FROM " + TABLE_REFILL
+                + " INNER JOIN " + TABLE_AUTO
+                + " ON " + TABLE_REFILL + "." + COLUMN_AUTO_ID + "=" + TABLE_AUTO + "." + COLUMN_AUTO_ID
+                + " AND " + TABLE_REFILL + "." + COLUMN_AUTO_ID + "=" + auto_id
+                + " AND " + TABLE_AUTO + "." + COLUMN_AUTO_ID + "=" + auto_id
+                + " ORDER BY " + TABLE_REFILL + "." +  COLUMN_DATE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+
+    public Cursor descByDate(int id){
+        String query = "SELECT " + COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM("
+                + " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM "
+                + TABLE_REPAIR  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_REFILL  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_WASHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_OTHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + ")" + " ORDER BY " + COLUMN_DATE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor orderByDate(int id){
+        String query = "SELECT " + COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM("
+                + " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM "
+                + TABLE_REPAIR  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_REFILL  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_WASHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_OTHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + ")" + " ORDER BY " + COLUMN_DATE ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor descByPrice(int id){
+        String query = "SELECT " + COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM("
+                + " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM "
+                + TABLE_REPAIR  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_REFILL  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_WASHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_OTHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + ")" + " ORDER BY " + COLUMN_PRICE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor orderByPrice(int id){
+        String query = "SELECT " + COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM("
+                + " SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE +  " FROM "
+                + TABLE_REPAIR  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_REFILL  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_WASHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id +
+                " UNION "
+                + "SELECT "+ COLUMN_ID + " , " + COLUMN_COLOR + " , " + COLUMN_NAME + " , "
+                + COLUMN_DATE + " , " + COLUMN_PRICE + " FROM "
+                + TABLE_OTHER  + " WHERE " +  COLUMN_AUTO_ID + "=" + id
+                + ")" + " ORDER BY " + COLUMN_PRICE ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         if(db != null){

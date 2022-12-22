@@ -301,14 +301,14 @@
                 android:text="Сформовані звіти будуть відправлені на пошту, яку ви вказали при реєстрації" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/report1"
                 android:layout_width="130dp"
                 android:layout_height="60dp"
                 android:textSize="17sp"
                 android:text="Звіт 1" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/report2"
                 android:layout_marginTop="5dp"
                 android:layout_width="130dp"
                 android:layout_height="60dp"

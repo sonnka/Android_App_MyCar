@@ -79,18 +79,19 @@ public class Statistic4 extends AppCompatActivity {
         ArrayList<PieEntry> expenses = new ArrayList<>();
 
         String nameCar = "";
-        for(int i = 0; i < ids.size()/2; i++){
-
-            Cursor cursor = dbHelper.findAutoById(ids.get(i));
-            if(cursor.getCount() == 0){
-                Toast.makeText(this,"No data!",Toast.LENGTH_LONG).show();
-            }else{
-                while(cursor.moveToNext()){
-                    nameCar = cursor.getString(2) + " " +cursor.getString(3);
+        for(int i = 0; i < ids.size(); i++){
+            if(name.get(i).equals("Заправка")) {
+                Cursor cursor = dbHelper.findAutoById(ids.get(i));
+                if (cursor.getCount() == 0) {
+                    Toast.makeText(this, "No data!", Toast.LENGTH_LONG).show();
+                } else {
+                    while (cursor.moveToNext()) {
+                        nameCar = cursor.getString(2) + " " + cursor.getString(3);
+                    }
                 }
-            }
 
-            expenses.add(new PieEntry(sum.get(i).floatValue(), nameCar));
+                expenses.add(new PieEntry(sum.get(i).floatValue(), nameCar));
+            }
 
         }
 
@@ -124,18 +125,21 @@ public class Statistic4 extends AppCompatActivity {
         ArrayList<PieEntry> expenses = new ArrayList<>();
 
         String nameCar = "";
-        for(int i = 2; i < ids.size(); i++){
+        for(int i = 0; i < ids.size(); i++){
 
-            Cursor cursor = dbHelper.findAutoById(ids.get(i));
-            if(cursor.getCount() == 0){
-                Toast.makeText(this,"No data!",Toast.LENGTH_LONG).show();
-            }else{
-                while(cursor.moveToNext()){
-                    nameCar = cursor.getString(2) + " " +cursor.getString(3);
+            if(name.get(i).equals("Ремонт")) {
+
+                Cursor cursor = dbHelper.findAutoById(ids.get(i));
+                if (cursor.getCount() == 0) {
+                    Toast.makeText(this, "No data!", Toast.LENGTH_LONG).show();
+                } else {
+                    while (cursor.moveToNext()) {
+                        nameCar = cursor.getString(2) + " " + cursor.getString(3);
+                    }
                 }
-            }
 
-            expenses.add(new PieEntry(sum.get(i).floatValue(), nameCar));
+                expenses.add(new PieEntry(sum.get(i).floatValue(), nameCar));
+            }
 
         }
 
