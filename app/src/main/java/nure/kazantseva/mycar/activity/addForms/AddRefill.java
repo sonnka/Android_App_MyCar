@@ -141,7 +141,11 @@ public class AddRefill extends AppCompatActivity {
             return;
         }
         if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
-            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
+            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)
+            && Long.parseLong(run.getText().toString().trim()) > 0
+            && Double.parseDouble(beforeRefill.getText().toString().trim()) >= 0
+            && Double.parseDouble(addFuel.getText().toString().trim()) >= 0
+            && Double.parseDouble(price.getText().toString().trim()) >= 0){
                 refill.setAuto_id(auto_id);
                 refill.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));

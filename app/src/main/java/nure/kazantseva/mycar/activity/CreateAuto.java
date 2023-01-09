@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 import nure.kazantseva.mycar.R;
@@ -101,28 +102,34 @@ public class CreateAuto extends AppCompatActivity {
         if(!inputValidator.isInputEditTextFilled(run)){
             return;
         }
-        Auto auto = new Auto();
-        auto.setUniqueCode(generateUniqueCode());
-        auto.setBrand(brand.getText().toString().trim());
-        auto.setModel(model.getText().toString().trim());
-        auto.setYear(Integer.parseInt(year.getText().toString()));
-        auto.setFuel(fuel.getText().toString().trim());
-        auto.setRun(Long.parseLong(run.getText().toString()));
+        if(Integer.parseInt(year.getText().toString()) <= LocalDate.now().getYear()
+                && Integer.parseInt(year.getText().toString()) >= 1900
+                && Long.parseLong(run.getText().toString()) >= 0) {
+            Auto auto = new Auto();
+            auto.setUniqueCode(generateUniqueCode());
+            auto.setBrand(brand.getText().toString().trim());
+            auto.setModel(model.getText().toString().trim());
+            auto.setYear(Integer.parseInt(year.getText().toString()));
+            auto.setFuel(fuel.getText().toString().trim());
+            auto.setRun(Long.parseLong(run.getText().toString()));
 
-        dbHelper.addAuto(auto);
+            dbHelper.addAuto(auto);
 
-        auto.setId(dbHelper.searchByCode(auto.getUniqueCode()));
+            auto.setId(dbHelper.searchByCode(auto.getUniqueCode()));
 
-        UserAuto userAuto = new UserAuto(email, auto.getId());
-        dbHelper.addUserAuto(userAuto);
+            UserAuto userAuto = new UserAuto(email, auto.getId());
+            dbHelper.addUserAuto(userAuto);
 
-        Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getApplicationContext(),"New auto created!",Toast.LENGTH_LONG).show();
 
-        Intent intent = new Intent(this, MainPage.class);
-        intent.putExtra("id",auto.getId());
-        intent.putExtra("email",email);
-        startActivity(intent);
-        this.finish();
+            Intent intent = new Intent(this, MainPage.class);
+            intent.putExtra("id",auto.getId());
+            intent.putExtra("email",email);
+            startActivity(intent);
+            this.finish();
+        }else{
+            Toast.makeText(this.getApplicationContext(),"Invalid data",Toast.LENGTH_LONG).show();
+        }
     }
 
     private String generateUniqueCode() {

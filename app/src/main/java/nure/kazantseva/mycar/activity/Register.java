@@ -53,16 +53,20 @@ public class Register extends AppCompatActivity {
             return;
         }
         if(!dbHelper.checkUser(email.getText().toString().trim())){
-            User user = new User();
-            user.setName(name.getText().toString());
-            user.setEmail(email.getText().toString());
-            user.setPassword(password.getText().toString());
+            if(password.getText().toString().length() >= 4) {
+                User user = new User();
+                user.setName(name.getText().toString());
+                user.setEmail(email.getText().toString());
+                user.setPassword(password.getText().toString());
 
-            dbHelper.addUser(user);
-            Toast.makeText(this.getApplicationContext(),"New account created!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, LogIn.class);
-            startActivity(intent);
-            this.finish();
+                dbHelper.addUser(user);
+                Toast.makeText(this.getApplicationContext(),"New account created!",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, LogIn.class);
+                startActivity(intent);
+                this.finish();
+            }else{
+                Toast.makeText(this.getApplicationContext(),"Easy password",Toast.LENGTH_LONG).show();
+            }
         }else{
             Toast.makeText(this.getApplicationContext(),"User with such email is already exist!"
                     ,Toast.LENGTH_LONG).show();

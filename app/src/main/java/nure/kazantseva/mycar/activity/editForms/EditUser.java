@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.time.LocalDate;
+
 import nure.kazantseva.mycar.R;
 import nure.kazantseva.mycar.activity.LogIn;
 import nure.kazantseva.mycar.activity.MainPage;
@@ -84,19 +86,22 @@ public class EditUser extends AppCompatActivity {
         }
         if(email.getText().toString().trim().equals(Email)
                 ||!dbHelper.checkUser(email.getText().toString().trim())){
+            if(password.getText().toString().length() >= 4) {
+                User user = new User();
+                user.setName(name.getText().toString());
+                user.setEmail(email.getText().toString());
+                user.setPassword(password.getText().toString());
 
-            User user = new User();
-            user.setName(name.getText().toString());
-            user.setEmail(email.getText().toString());
-            user.setPassword(password.getText().toString());
-
-            dbHelper.updateUser(user,Email);
-            Toast.makeText(this.getApplicationContext(),"User is updated!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, MainPage.class);
-            intent.putExtra("email",email.getText().toString());
-            intent.putExtra("id",auto_id);
-            startActivity(intent);
-            this.finish();
+                dbHelper.updateUser(user,Email);
+                Toast.makeText(this.getApplicationContext(),"User is updated!",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, MainPage.class);
+                intent.putExtra("email",email.getText().toString());
+                intent.putExtra("id",auto_id);
+                startActivity(intent);
+                this.finish();
+            }else{
+                Toast.makeText(this.getApplicationContext(),"Easy password",Toast.LENGTH_LONG).show();
+            }
         }else{
             Toast.makeText(this.getApplicationContext(),"User with such email is already exist!"
                     ,Toast.LENGTH_LONG).show();

@@ -124,7 +124,8 @@ public class AddOther extends AppCompatActivity {
             return;
         }
         if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
-            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
+            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)
+            && Double.parseDouble(price.getText().toString().trim()) >= 0){
                 other.setAuto_id(auto_id);
                 other.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));

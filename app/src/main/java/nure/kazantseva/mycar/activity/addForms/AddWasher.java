@@ -116,7 +116,8 @@ public class AddWasher extends AppCompatActivity {
             return;
         }
         if(inputValidator.validateDate(date.getText().toString().trim()) && auto_id != 0){
-            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)){
+            if(!inputValidator.convertToLocalDate(date.getText().toString().trim()).equals(null)
+            && Double.parseDouble(price.getText().toString().trim()) >= 0){
                 washer.setAuto_id(auto_id);
                 washer.setDate(inputValidator.convertToLocalDate
                         (date.getText().toString().trim()));

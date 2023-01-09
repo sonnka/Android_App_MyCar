@@ -75,12 +75,14 @@ public class DBHelper extends SQLiteOpenHelper {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
                 + COLUMN_NAME + " TEXT,"
                 + COLUMN_EMAIL + " TEXT UNIQUE,"
-                + COLUMN_PASSWORD + " TEXT"
+                + COLUMN_PASSWORD + " TEXT,"
+                + COLUMN_IMAGE + " TEXT"
                 + ")";
 
         String CREATE_AUTO_TABLE = "CREATE TABLE " + TABLE_AUTO + "("
                 + COLUMN_AUTO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_UNIQUE_CODE + " TEXT,"
+                + COLUMN_IMAGE + " TEXT,"
                 + COLUMN_BRAND + " TEXT,"
                 + COLUMN_MODEL + " TEXT,"
                 + COLUMN_YEAR + " INTEGER,"

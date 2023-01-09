@@ -415,11 +415,24 @@ public class AboutMe extends Fragment {
 
         BaseFont bf=BaseFont.createFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font font=new Font(bf,14,Font.NORMAL);
+        Font fontBold=new Font(bf,16,Font.BOLD);
         document.open();
+
+
+        String nameReport = "Звіт витрат на ремонт автомобіля";
 
         String dataOfGenerate = "День формування звіту : " +
                 LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        Paragraph parag = new Paragraph(nameReport, fontBold);
+        parag.setAlignment(Element.ALIGN_CENTER);
         try {
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(parag);
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
             document.add(new Paragraph(dataOfGenerate,font));
             document.add(new Paragraph(""));
             document.add(new Paragraph(name.getText().toString(),font));
@@ -487,11 +500,26 @@ public class AboutMe extends Fragment {
 
         BaseFont bf=BaseFont.createFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font font=new Font(bf,14,Font.NORMAL);
+        Font fontBold=new Font(bf,16,Font.BOLD);
         document.open();
+
+
+        String nameReport = "Звіт витрат на заправку автомобіля";
 
         String dataOfGenerate = "День формування звіту : " +
                 LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
+        Paragraph parag = new Paragraph(nameReport, fontBold);
+        parag.setAlignment(Element.ALIGN_CENTER);
+
         try {
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(parag);
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
             document.add(new Paragraph(dataOfGenerate,font));
             document.add(new Paragraph(""));
             document.add(new Paragraph(name.getText().toString(),font));
