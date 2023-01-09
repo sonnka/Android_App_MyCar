@@ -34,6 +34,8 @@ public class LogIn extends AppCompatActivity {
 
         inputValidator = new InputValidator(activity);
         dbHelper = new DBHelper(activity);
+//        dbHelper.addImageColumnUser();
+//        dbHelper.addImageColumnAuto();
     }
 
     public void onClickLogIn(View view) {
